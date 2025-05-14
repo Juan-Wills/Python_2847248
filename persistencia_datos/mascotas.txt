@@ -1,0 +1,26 @@
+Base de datos para mascotas
+mascota No: 1
+	nombre mascota: copito
+	tipo mascota: gato
+	edad mascota: 6
+	raza mascota: N/A
+mascota No: 2
+	nombre mascota: Toby
+	tipo mascota: perro
+	edad mascota: 18
+	raza mascota: pomerania
+mascota No: 3
+	nombre mascota: Diomedez
+	tipo mascota: loro
+	edad mascota: 20
+	raza mascota: N/A
+mascota No: 4
+	nombre mascota: Juanita
+	tipo mascota: conejo
+	edad mascota: 24
+	raza mascota: N/A
+mascota No: 5
+	nombre mascota: sancho
+	tipo mascota: caballo
+	edad mascota: 6
+	raza mascota: na

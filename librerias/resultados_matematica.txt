@@ -1,0 +1,5 @@
+la suma de 30 con 14 es 44
+la division de 30 con 14 es 2.142857142857143
+la suma de 120 con 23 es 143
+la division de 120 con 23 es 5.217391304347826
+la multiplicacion de 120 con 23 es 2760
