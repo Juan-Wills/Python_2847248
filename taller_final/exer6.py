@@ -6,34 +6,61 @@ Crea un sistema de inventario usando diccionarios. Implementa funciones para:
 · Encontrar el producto más caro
 """
 
+
 def main():
-    products= [{
-                'id': 0,
-                'nombre': "AK-47",
-                'cantidad': 120,
-                'precio unitario': 5000
-                },
-                {                
-                'id': 1,
-                'nombre': "Glock",
-                'cantidad': 500,
-                'precio unitario': 600
-                }
-    ]
-    value_test= [3, "RPM-012", 60, 5000]
+    products = []
 
-    create_product(value_test)
+    data = [3, "RPM-012", 60, 5000]
+    create_product(products, data)
 
-def create_product(values):
-    key_test= ['id', 'nombre', 'cantidad',  'precio_unitario']
-    print(zip(key_test, values))
-    
-    
-def update_amount():
+    data = [0, "AK-47", 500, 8000]
+    creation= create_product(products, data)
 
-def total_inventory():
+    update= update_amount_by_index(products, 120, 3)
 
-def most_expensive():
+    total= total_price(products)
 
-if __name__== '__main__':
+    expensive= most_expensive(products)
+
+    # print(products)
+
+
+keys = ["id", "nombre", "cantidad", "precio_unitario"]
+
+
+def create_product(to_fill: list, values: list):
+    new_dict = {key: value for key, value in zip(keys, values)}
+    to_fill.append(new_dict)
+    return print("Dictionary succefully created\n")
+
+
+def update_amount_by_index(product_list: list, cantidad: list, index: int):
+    for items in product_list:
+        if items["id"] == index:
+            items["cantidad"] = cantidad
+            return "Update succefully applied\n"
+    return "ID not found\n"
+
+
+def total_price(product_list: list):
+    result = int()
+    for products in product_list:
+        result += products["precio_unitario"] * products["cantidad"]
+    return f"Total inventory price: {result}\n"
+
+
+def most_expensive(product_list: list):
+    precios = []
+
+    for product in product_list:
+        precios.append(product["precio_unitario"])
+
+    price = max(precios)
+    index = precios.index(price)
+    nombre = product_list[index]
+
+    return f"The most expensive item is {nombre["nombre"]} with {price}\n"
+
+
+if __name__ == "__main__":
     main()

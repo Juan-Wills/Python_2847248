@@ -5,26 +5,30 @@ Dada una lista de números, crea funciones para
 · Filtrar solo los números pares
 · Ordenar la lista de mayor a menor
 """
-def main():
-    nums= [num for num in range(1, 101)]
-    print(ops(nums, '<<'))
 
-def ops(seq:list, operation:str):
-    if operation == '<>':
-        result= (max(seq), min(seq))
-    elif operation == '+/':
-        result= sum(seq)//len(seq)
-    elif operation == '2n':
-        result=[]
+
+def main():
+    nums = [num for num in range(1, 101)]
+    print(ops(nums, "par"))
+
+
+def ops(seq: list, operation: str):
+    if operation == "min/max":
+        result = (max(seq), min(seq))
+    elif operation == "avg":
+        result = sum(seq) // len(seq)
+    elif operation == "par":
+        result = []
         for nums in seq:
-            if nums%2 == 0:
+            if nums % 2 == 0:
                 result.append(nums)
-    elif operation == '<<':
+    elif operation == "desc":
         seq.sort(reverse=True)
-        result= seq
+        result = seq
     else:
-        result= seq
+        result = seq
     return result
 
-if __name__=='__main__':
+
+if __name__ == "__main__":
     main()
