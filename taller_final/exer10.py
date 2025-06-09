@@ -74,3 +74,6 @@ def main():
     usuario.retirar(5000)
     print(usuario.consultar_saldo)
     print(usuario)
+
+if __name__ == "__main__":
+    main()
