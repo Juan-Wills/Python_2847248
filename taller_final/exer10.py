@@ -19,8 +19,7 @@ class CuentaBancaria:
         return f"""
         Titular: {self.titular}
         Numero de Cuenta: {self.numero_cuenta}
-        Saldo: {self.saldo}
-        """
+        Saldo: $ {self.saldo:,}"""
 
     def depositar(self, cantidad):
         if cantidad < 0:

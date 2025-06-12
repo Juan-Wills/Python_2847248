@@ -48,12 +48,3 @@ def numbases(num, base):
                 result= re.sub(keys, hex[keys], result)
 
         return result
-
-def main():
-    # print(isprimo(2), mcd(2, 3))
-    return
-
-print(numbases(126, 16))
-
-if __name__ == "__main__":
-    main()
