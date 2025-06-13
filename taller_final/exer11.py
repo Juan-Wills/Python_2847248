@@ -11,12 +11,11 @@ db = x.database
 
 
 class CuentaAhorro(x.CuentaBancaria):
-
     def __init__(self, titular, numero_cuenta, saldo, int_anual):
         super().__init__(titular, numero_cuenta, saldo)
         self.int_anual = int_anual
         self.int_acum = 0
-        self.fecha_creacion = None
+        self._fecha_creacion = datetime.date.today()
 
     def __str__(self):
         return f"""{super().__str__()}
@@ -25,38 +24,38 @@ class CuentaAhorro(x.CuentaBancaria):
         """
 
     def interes_mensual(self):
-        return (self.int_anual / 12) * self.saldo
+        return round((self.int_anual / 12) * self.saldo)
 
-    def cobro_ints(self, fecha=datetime.date.today()):
-        if isinstance(fecha, datetime):
-            months_acum = round((fecha - self.fecha_creacion) * 30.4167)
+    def acumulado(self, fecha=datetime.date.today()):
+        if isinstance(fecha, datetime.date):
+            months_acum = round((fecha - self._fecha_creacion).days / 12)
 
             if months_acum == 0:
                 return 0
 
             self.int_acum+= months_acum * self.interes_mensual()
-            return self.int_acum
+            return (months_acum, self.int_acum)
 
-    @property
-    def fecha_creacion(self):
-        return self._fecha_creacion
-
-    @fecha_creacion.setter
-    def fecha_creacion(self, fecha_creacion):
-        if fecha_creacion:
-            self._fecha_creacion= fecha_creacion
-            return
-
-        raise PermissionError("This attribute cannot be change.")
 
 
 class CuentaCorriente(x.CuentaBancaria):
-    def __init__(self, titular, saldo, limite):
-        super().__init__(titular, saldo)
+    def __init__(self, titular, numero_cuenta, saldo, limite= 500_000):
+        super().__init__(titular, numero_cuenta, saldo)
         self.limite = limite
+        self._fecha_creacion = datetime.date.today()
 
+    def retirar(self, cantidad):
+        operation= self.saldo - cantidad
+        if operation < 0 and abs(operation) > self.limite:
+            raise OverflowError(f"La cantidad a retirar sobrepasa el limite de sobregiro {self.limite}")
+            
+        self.saldo-= cantidad
 
-cuentaA = CuentaAhorro("Diego", 123456789, 1_000_000, 2)
-print(cuentaA.interes_mensual())
+    @property
+    def saldo(self):
+        return self._saldo
 
-cuentaC = CuentaCorriente("Felipe", 1_000_000, 500_000)
+    @saldo.setter
+    def saldo(self, saldo):
+        self._saldo= saldo
+
