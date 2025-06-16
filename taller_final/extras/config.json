@@ -1,0 +1,47 @@
+{
+  "appName": "Python App",
+  "version": "1.0.0",
+  "environment": "development",
+  "database": {
+    "host": "localhost",
+    "port": 5000,
+    "user": "admin",
+    "password": "123456789",
+    "dbName": "database"
+  },
+  "apiKeys": [
+    {
+      "service": "googleMaps",
+      "key": "your_Maps_api_key_here"
+    },
+    {
+      "service": "openWeather",
+      "key": "your_open_weather_api_key_here"
+    }
+  ],
+  "features": {
+    "userRegistration": true,
+    "emailNotifications": false,
+    "dataExport": true
+  },
+  "logging": {
+    "level": "info",
+    "outputPath": "/var/log/pythonapp.log"
+  },
+  "servers": [
+    {
+      "name": "webServer1",
+      "ipAddress": "192.168.1.100",
+      "role": "frontend"
+    },
+    {
+      "name": "appServer1",
+      "ipAddress": "192.168.1.101",
+      "role": "backend"
+    }
+  ],
+  "settings": {
+    "maxUsers": 1000,
+    "timeoutSeconds": 30
+  }
+}
