@@ -9,7 +9,7 @@ from math import sqrt
 
 def main():
     coor = [(2, 3), (2, 7), (0, 0), (-9, 7), (0, 1), (-5, -5)]
-    output= tup_ops(coor, "avg_orig")
+    output = tup_ops(coor, "avg_orig")
     print(output)
 
 

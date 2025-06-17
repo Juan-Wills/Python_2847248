@@ -4,7 +4,9 @@ Crea un módulo utilidades.py con funciones matemáticas útiles:
 · Calcular el máximo común divisor
 · Convertir entre diferentes bases numéricas
 """
+
 import re
+
 
 def isprimo(num: int):
     if not isinstance(num, int):
@@ -18,7 +20,7 @@ def isprimo(num: int):
 
 
 def mcd(num1, num2):
-    if not isinstance(num1, int) and  isinstance(num2, int):
+    if not isinstance(num1, int) and isinstance(num2, int):
         raise ValueError("Elements must be integers")
 
     if num2 > num1:
@@ -34,17 +36,17 @@ def numbases(num, base):
     if not isinstance(num, int) and isinstance(base, int):
         raise ValueError("Elements must be integers")
 
-    reminder= ''
-    while num:            
-        reminder+= str(num % base)
-        num//= base
+    reminder = ""
+    while num:
+        reminder += str(num % base)
+        num //= base
 
-    result= reminder[::-1]
+    result = reminder[::-1]
 
     if base == 16:
-        hex= {'01':'A', '11':'B', '21':'C', '31':'D', '41':'E', '51':'F'}
+        hex = {"01": "A", "11": "B", "21": "C", "31": "D", "41": "E", "51": "F"}
         for keys in hex:
             if keys in reminder[::-1]:
-                result= re.sub(keys, hex[keys], result)
+                result = re.sub(keys, hex[keys], result)
 
         return result

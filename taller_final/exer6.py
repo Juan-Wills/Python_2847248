@@ -14,13 +14,13 @@ def main():
     create_product(products, data)
 
     data = [0, "AK-47", 500, 8000]
-    creation= create_product(products, data)
+    creation = create_product(products, data)
 
-    update= update_amount_by_index(products, 120, 3)
+    update = update_amount_by_index(products, 120, 3)
 
-    total= total_price(products)
+    total = total_price(products)
 
-    expensive= most_expensive(products)
+    expensive = most_expensive(products)
 
     # print(products)
 

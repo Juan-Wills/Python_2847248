@@ -33,23 +33,24 @@ class CuentaAhorro(x.CuentaBancaria):
             if months_acum == 0:
                 return 0
 
-            self.int_acum+= months_acum * self.interes_mensual()
+            self.int_acum += months_acum * self.interes_mensual()
             return (months_acum, self.int_acum)
 
 
-
 class CuentaCorriente(x.CuentaBancaria):
-    def __init__(self, titular, numero_cuenta, saldo, limite= 500_000):
+    def __init__(self, titular, numero_cuenta, saldo, limite=500_000):
         super().__init__(titular, numero_cuenta, saldo)
         self.limite = limite
         self._fecha_creacion = datetime.date.today()
 
     def retirar(self, cantidad):
-        operation= self.saldo - cantidad
+        operation = self.saldo - cantidad
         if operation < 0 and abs(operation) > self.limite:
-            raise OverflowError(f"La cantidad a retirar sobrepasa el limite de sobregiro {self.limite}")
-            
-        self.saldo-= cantidad
+            raise OverflowError(
+                f"La cantidad a retirar sobrepasa el limite de sobregiro {self.limite}"
+            )
+
+        self.saldo -= cantidad
 
     @property
     def saldo(self):
@@ -57,5 +58,4 @@ class CuentaCorriente(x.CuentaBancaria):
 
     @saldo.setter
     def saldo(self, saldo):
-        self._saldo= saldo
-
+        self._saldo = saldo
