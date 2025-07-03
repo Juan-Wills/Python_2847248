@@ -1,0 +1,39 @@
+{
+  "libros": [
+    {
+      "titulo": "Alas De Hierro",
+      "genero": "Novela",
+      "autor": "Rebecca Yarros",
+      "editorial": "Planeta",
+      "fecha_publicacion": "23/03/2009"
+    },
+    {
+      "titulo": "El Plan Maestro",
+      "genero": "Novela",
+      "autor": "Javier Sierra",
+      "editorial": "Club Penguine",
+      "fecha_publicacion": "12/05/2003"
+    },
+    {
+      "titulo": "Encuentra Tu Persona Vitamina",
+      "genero": "Autoayuda",
+      "autor": "Marian Rojas Estape",
+      "editorial": "Espasa",
+      "fecha_publicacion": "12/01/2012"
+    },
+    {
+      "titulo": "Este Dolor No Es Mio",
+      "genero": "Autoayuda",
+      "autor": "Marl Wolynn",
+      "editorial": "Gaia",
+      "fecha_publicacion": "15/02/2012"
+    },
+    {
+      "titulo": "Como Vender Su Marca Personal",
+      "genero": "Finanzas",
+      "autor": "Raquel Gomes H",
+      "editorial": "Conecta",
+      "fecha_publicacion": "12/05/2023"
+    }
+  ]
+}
