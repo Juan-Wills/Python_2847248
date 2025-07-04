@@ -19,15 +19,18 @@ def gestion_libros():
           
         0. Volver
     """)
+
     option= input('Ingresar opcion: ')
+    filter_options= ['titulo', 'autor', 'genero', 'editorial', 'fecha_publicacion']
 
     match option:
         case '0':
             return
+        
         case '1':
-            filter_options= ['titulo', 'autor', 'genero', 'editorial', 'fecha_publicacion']
             while True:
-                print('Elegir categoria: ')
+                print("Filtrar libros")
+                print('\nElegir categoria: ')
                 print('1. Titulo\t2. Autor\t3. Genero\t4. Editorial\t5. Fecha')
                 option= input('Ingresar opcion: ')
                 index_option= filter_options[int(option)-1]
@@ -38,10 +41,9 @@ def gestion_libros():
                     
                     if bs.find_book(index_option, input("Filtro: ").title()):
                         break
-                    
-
 
         case '2':
+            print("Agregar nuevo libro")
             print("\nIngrese los datos del libro:")
             # Validacion de los input del usuario
             while True:
@@ -62,7 +64,7 @@ def gestion_libros():
             while True:
                 publicacion= input('Fecha de Publicacion: ')
                 try: 
-                    datetime.datetime.strptime(publicacion, '%d/%m/%Y')
+                    datetime.datetime.strptime(publicacion, '%d/-%m/%Y')
                 except ValueError:
                     print("Error: La fecha no cumple con las reglas de formato, ingresar fecha con el siguiente formato 'DD/MM/YYYY'\nD: dia\tM: mes\tY: anio")
                 else:
@@ -76,7 +78,8 @@ def gestion_libros():
             bs.add_book(Libro(titulo, genero, autor, editorial, publicacion))
 
         case '3':
-            pass
+            print('Actualizar libro')
+            print('\n')
         case '4':
             pass
         case _:

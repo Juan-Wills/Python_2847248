@@ -1,5 +1,4 @@
-from models.prestamo import Prestamo
-from models.usuario import Usuario
+import re
 import json
 
 libro_path= 'C:/Users/juand/Documents/Python/Python_2847248/taller_final/Biblioteca/data/libros.json'
@@ -31,7 +30,7 @@ def add_book(libro):
 
 def find_book(filter_by: str, feature: str):
     data= retrieve_data(libro_path)
-    filtered_data= list(filter(lambda x: x[filter_by] == feature, data['libros'])) # Use regex instead
+    filtered_data= list(filter(lambda x: re.search(feature, x[filter_by]), data['libros']))
     if len(filtered_data) == 0:
         print(f'No se encontraron resultados con la caracteristica {filter_by.replace('_', ' de ').capitalize()}: {feature}.\n')
         return

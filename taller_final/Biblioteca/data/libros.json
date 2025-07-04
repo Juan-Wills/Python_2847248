@@ -1,6 +1,7 @@
 {
   "libros": [
     {
+      "id": 0,
       "titulo": "Alas De Hierro",
       "genero": "Novela",
       "autor": "Rebecca Yarros",
@@ -8,6 +9,7 @@
       "fecha_publicacion": "23/03/2009"
     },
     {
+      "id": 1,
       "titulo": "El Plan Maestro",
       "genero": "Novela",
       "autor": "Javier Sierra",
@@ -15,6 +17,7 @@
       "fecha_publicacion": "12/05/2003"
     },
     {
+      "id": 2,
       "titulo": "Encuentra Tu Persona Vitamina",
       "genero": "Autoayuda",
       "autor": "Marian Rojas Estape",
@@ -22,6 +25,7 @@
       "fecha_publicacion": "12/01/2012"
     },
     {
+      "id": 3,
       "titulo": "Este Dolor No Es Mio",
       "genero": "Autoayuda",
       "autor": "Marl Wolynn",
@@ -29,11 +33,20 @@
       "fecha_publicacion": "15/02/2012"
     },
     {
+      "id": 4,
       "titulo": "Como Vender Su Marca Personal",
       "genero": "Finanzas",
       "autor": "Raquel Gomes H",
       "editorial": "Conecta",
       "fecha_publicacion": "12/05/2023"
+    },
+    {
+      "id": 5,
+      "titulo": "El Samuria Secreto",
+      "genero": "Fantasia",
+      "autor": "Blanca Alvares",
+      "editorial": "Libros Y Libros",
+      "fecha_publicacion": "20/01/2023"
     }
   ]
 }
