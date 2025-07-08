@@ -8,8 +8,12 @@ class Libro:
         autor: str,
         editorial: str,
         fecha_publicacion: str,
+        id= None,
     ):
-        self.id= self.autoincrement()
+        if id:
+            self.id= id
+        else:
+            self.id= self.autoincrement()
         self.titulo = titulo
         self.genero = genero
         self.autor = autor
@@ -29,7 +33,7 @@ class Libro:
     def autoincrement(self):
         data= retrieve_data(libro_path)
         try:
-            self.id= data['libros'][-1]['id'] + 1
+            self.id= int(data['libros'][-1]['id']) + 1
         except KeyError:
-            self.id= 1
-        return self.id
+            self.id= "1"
+        return str(self.id)
