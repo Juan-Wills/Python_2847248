@@ -1,60 +1,28 @@
 {
   "libros": [
     {
-      "autor": "Rebecca Yarros",
-      "editorial": "Planeta",
-      "fecha_publicacion": "23/03/2009",
-      "genero": "Novela",
-      "id": "0",
-      "titulo": "Alas De Hierro"
-    },
-    {
-      "autor": "Javier Sierra",
-      "editorial": "Club Penguine",
-      "fecha_publicacion": "12/05/2003",
-      "genero": "Novela",
       "id": "1",
-      "titulo": "El Plan Maestro"
+      "titulo": "Cien a\u00f1os de soledad",
+      "genero": "Realismo m\u00e1gico",
+      "autor": "Gabriel Garc\u00eda M\u00e1rquez",
+      "editorial": "Editorial Norteamericana",
+      "fecha_publicacion": "08/12/1967"
     },
     {
-      "autor": "Marian Rojas Estape",
-      "editorial": "Espasa",
-      "fecha_publicacion": "12/01/2012",
-      "genero": "Autoayuda",
       "id": "2",
-      "titulo": "Encuentra Tu Persona Vitamina"
+      "titulo": "La sombra del viento",
+      "genero": "Novela",
+      "autor": "Carlitos",
+      "editorial": "Casa Pajaro",
+      "fecha_publicacion": "10/10/1997"
     },
     {
-      "autor": "Marl Wolynn",
-      "editorial": "Gaia",
-      "fecha_publicacion": "15/02/2012",
-      "genero": "Autoayuda",
       "id": "3",
-      "titulo": "Este Dolor No Es Mio"
-    },
-    {
-      "autor": "Blanca Alvares",
-      "editorial": "Libros Y Libros",
-      "fecha_publicacion": "20/01/2023",
-      "genero": "Fantasia",
-      "id": "5",
-      "titulo": "El Samuria Secreto"
-    },
-    {
-      "autor": "Joe Dispenza",
-      "editorial": "Castillo Editorial",
-      "fecha_publicacion": "12/10/2012",
-      "genero": "Autoayuda",
-      "id": "6",
-      "titulo": "Sobrenatural"
-    },
-    {
-      "id": "4",
-      "titulo": "Como Vender Su Marca Personal",
-      "genero": "Finanzas",
-      "autor": "Raquel Gomez H",
-      "editorial": "Conecta",
-      "fecha_publicacion": "12/05/2023"
+      "titulo": "El Coronel No Tiene Quien Le Escriba",
+      "genero": "Realismo magico",
+      "autor": "Grabriel Garcia Marquez",
+      "editorial": "Para Todos",
+      "fecha_publicacion": "20/12/1957"
     }
   ]
 }

@@ -1,5 +1,5 @@
 import sys
-import rich
+# import rich
 from views.view_libros import gestion_libros
 
 def main():
@@ -29,7 +29,7 @@ def main():
                     pass
                 case _:
                     print('Valor ingresado no valido, ingrese un valor que corresponda a las opciones del menu de navegacion.')
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, EOFError):
         print('\nPrograma cerrado forzosamente')
 
 if __name__=='__main__':

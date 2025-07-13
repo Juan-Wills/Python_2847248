@@ -1,19 +1,14 @@
-from services.biblioteca_service import libro_path, retrieve_data
-
 class Libro:
     def __init__(
         self,
+        id: str,
         titulo: str,
         genero: str,
         autor: str,
         editorial: str,
         fecha_publicacion: str,
-        id= None,
     ):
-        if id:
-            self.id= id
-        else:
-            self.id= self.autoincrement()
+        self.id= id
         self.titulo = titulo
         self.genero = genero
         self.autor = autor
@@ -21,7 +16,7 @@ class Libro:
         self.fecha_publicacion = fecha_publicacion
         
 
-    def __str__(self):  # rich
+    def __str__(self):
         return f"""
     Id: {self.id}
     Titulo: {self.titulo}
@@ -30,10 +25,7 @@ class Libro:
     Fecha de Publicacion: {self.fecha_publicacion}
     Editorial: {self.editorial}
     """
-    def autoincrement(self):
-        data= retrieve_data(libro_path)
-        try:
-            self.id= int(data['libros'][-1]['id']) + 1
-        except KeyError:
-            self.id= "1"
-        return str(self.id)
+
+    def to_dict(self):
+        return vars(self)
+    
