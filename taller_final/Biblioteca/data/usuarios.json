@@ -1,0 +1,28 @@
+{
+  "usuarios": [
+    {
+      "nombre": "Juan",
+      "apellido": "Wills",
+      "correo": "juan@gmail.com",
+      "residencia": "Dosquebradas, Risaralda, Colombia",
+      "telefono": "3225615099",
+      "afiliacion": true
+    },
+    {
+      "nombre": "Jesus Santiago",
+      "apellido": "Wills Jacome",
+      "correo": "santi@gmail.com",
+      "residencia": "",
+      "telefono": "",
+      "afiliacion": true
+    },
+    {
+      "nombre": "Sol Jaqueline",
+      "apellido": "Jacome Trujillo",
+      "correo": "sol@gmail.com",
+      "residencia": "Tunja, Boyaca, Colombia",
+      "telefono": "3108427570",
+      "afiliacion": false
+    }
+  ]
+}

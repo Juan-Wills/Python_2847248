@@ -1,5 +1,5 @@
 class Usuario:
-    def __init__(self, nombre, apellido, correo, residencia='NA', telefono='NA', afiliacion= False):
+    def __init__(self, nombre, apellido, correo, residencia='', telefono='', afiliacion= False):
         self.nombre= nombre
         self.apellido= apellido
         self.correo= correo
@@ -9,11 +9,21 @@ class Usuario:
 
 
     def __str__(self):
-        print(f"""
-    Nombre: {self.nombre}
-    Apellido: {self.apellido}
-    Correo: {self.correo}
-    Telefono: {self.telefono}
-    Direccion de Residencia: {self.residencia}
-    Afiliacion: {'Afiliado' if self.afiliacion else 'No afiliado'}
-    """)
+        return f"""
+        Nombre: {self.nombre}
+        Apellido: {self.apellido}
+        Correo: {self.correo}
+        Telefono: {self.telefono}
+        Direccion de Residencia: {self.residencia}
+        Afiliacion: {'Afiliado' if self.afiliacion else 'No afiliado'}
+        """
+        
+    def to_dict(self):
+        return {
+            'nombre': self.nombre,
+            'apellido': self.apellido,
+            'correo': self.correo,
+            'residencia': self.residencia,
+            'telefono': self.telefono,
+            'afiliacion': self.afiliacion
+        }

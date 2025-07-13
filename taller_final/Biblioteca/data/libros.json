@@ -1,14 +1,6 @@
 {
   "libros": [
     {
-      "id": "1",
-      "titulo": "Cien a\u00f1os de soledad",
-      "genero": "Realismo m\u00e1gico",
-      "autor": "Gabriel Garc\u00eda M\u00e1rquez",
-      "editorial": "Editorial Norteamericana",
-      "fecha_publicacion": "08/12/1967"
-    },
-    {
       "id": "2",
       "titulo": "La sombra del viento",
       "genero": "Novela",

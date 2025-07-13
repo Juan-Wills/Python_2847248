@@ -1,7 +1,9 @@
 import datetime
 import json
+from models.libro import Libro
+from models.usuario import Usuario
 
-"""
+
 class Prestamo(Usuario, Libro):
     def __init__(self, fecha_prestamo, fecha_devolucion, correo, nombre,):
         super(Usuario).__init__(correo, nombre)
@@ -25,5 +27,3 @@ class Prestamo(Usuario, Libro):
             print(f"expiro hace {abs(dias_restantes)} dias. Por favor, contactar urgentemente al deudor")
         print("\nDatos del usuario: ")
         print(f"Telefono: {usuario['telefono']}\tCorreo: {usuario['correo']}")
-
-"""

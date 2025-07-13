@@ -1,12 +1,12 @@
 class Libro:
     def __init__(
         self,
-        id: str,
         titulo: str,
         genero: str,
         autor: str,
         editorial: str,
         fecha_publicacion: str,
+        id: str,
     ):
         self.id= id
         self.titulo = titulo
@@ -28,4 +28,5 @@ class Libro:
 
     def to_dict(self):
         return vars(self)
+
     

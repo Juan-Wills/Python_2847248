@@ -1,6 +1,8 @@
 import sys
-# import rich
 from views.view_libros import gestion_libros
+from views.view_usuarios import gestion_usuarios
+# from views.view_prestamos import gestion_prestamos
+# from views.view_multas import gestion_multas
 
 def main():
     try:
@@ -13,7 +15,7 @@ def main():
         4. Multas
 
         0. Salir del Programa
-            """)  # rich
+            """)
             menu_option= input("Ingresar respuesta: ")
 
             match menu_option:
@@ -22,7 +24,7 @@ def main():
                 case '1':
                     gestion_libros()
                 case '2':
-                    pass
+                    gestion_usuarios()
                 case '3':
                     pass
                 case '4':
