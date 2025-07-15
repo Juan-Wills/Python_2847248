@@ -7,15 +7,14 @@ from views.view_usuarios import gestion_usuarios
 def main():
     try:
         while True:
-            print("""
-                Sistema Gestor de Bibliotecas
-        1. Libros
-        2. Usuarios
-        3. Prestamos y Devoluciones
-        4. Multas
-
-        0. Salir del Programa
-            """)
+            print((
+            "\n   Sistema Gestor de Bibliotecas\n\n"
+            "1. Libros\n"
+            "2. Usuarios\n"
+            "3. Prestamos y Devoluciones\n"
+            "4. Multas\n\n"
+            "0. Salir del Programa\n"
+            ))
             menu_option= input("Ingresar respuesta: ")
 
             match menu_option:

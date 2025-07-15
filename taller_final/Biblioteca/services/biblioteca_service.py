@@ -24,7 +24,7 @@ def validate_input_format(input, mode="simple_format", special_chars: str= None,
         print(
             "Error: El valor ingresado es invalido, por favor evitar caracteres speciales como #$%@."
         )
-        return
+        return False
 
     if mode == "date":
         if optional and input == "":
@@ -35,7 +35,7 @@ def validate_input_format(input, mode="simple_format", special_chars: str= None,
         print(
             'Error: El formato de fecha es invalido, por favor ingresar la fecha con el siguiente formato "DD/MM/YYYY"'
         )
-        return
+        return False
 
     if mode == "boolean":
         if optional and input == "":
@@ -53,7 +53,7 @@ def validate_input_format(input, mode="simple_format", special_chars: str= None,
         if re.fullmatch(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', input):  
             return True
         print("Error: El formato de correo es invalido, por favor ingresar un correo valido.")
-        return
+        return False
     
     if mode == "phone":
         if optional and input == "":
@@ -62,10 +62,13 @@ def validate_input_format(input, mode="simple_format", special_chars: str= None,
         if re.fullmatch(r'\+?\d{1,3}[-\s]?\(?\d{1,4}\)?[-\s]?\d{1,4}[-\s]?\d{1,9}', input):
             return True
         print("Error: El formato de telefono es invalido, por favor ingresar un telefono valido.")
-        return
+        return False
+
+    print("Error Final de Funcion: No se aplico ningun filtro por un error en los parametros, asegurece que esten bien asignados.")
+    return False
     
 def validate_menu_options(
-    option, min_args=0, max_args=6, type=None, mode=None, object_name= None
+    option, min_args=1, max_args=5, type=None, mode=None, object_name= None
 ):
     try:
         option = int(option)
@@ -75,10 +78,10 @@ def validate_menu_options(
         )
         return False
 
-    condition = max_args > option > min_args
+    condition = max_args >= option >= min_args
 
-    if mode == "inclusive":
-        condition = max_args >= option >= min_args
+    if mode == "exclusive":
+        condition = max_args > option > min_args
 
     if mode == "equal":
         condition = max_args == option or min_args == option
@@ -96,6 +99,7 @@ def validate_menu_options(
         print(
             "Valor ingresado no valido, ingrese un valor que corresponda a las opciones del menu de navegacion."
         )
+        return False
 
 
 # Path management
@@ -119,8 +123,9 @@ def retrieve_data(path, obj):
     
     except json.JSONDecodeError:
         print(f"Error: El archivo en {path} esta vacio o tiene un formato invalido. Se ha ingresado una estructura valida.")
-        save(path, {"--header--": []})  # Create an empty file if it doesn't exist
-        return retrieve_data(path, obj)
+        if save(path, {"--header--": []}):  # Create an empty file if it doesn't exist
+            return retrieve_data(path, obj)
+        return None
 
 def save(path, data: list):
     try:
@@ -128,6 +133,7 @@ def save(path, data: list):
         with open(path, "w", encoding="utf-8") as file:
             data = {header: [element.to_dict() for element in data[header]]}
             json.dump(data, file, indent=2)
+            return True
     except FileNotFoundError:
         print(
             f"Error: No se pudo encontrar el archivo libros.json. Asegurese de que el archivo exista"
@@ -153,8 +159,10 @@ def convert_dict_to_object(data: dict, obj_type):
     return data
 
 
-def get_feat(object, index):
+def get_feat(object: str, index : str):
     index = int(index) -1
+    object= object.lower()
+
     if object == 'usuario':
         object = [
             "nombre",
@@ -175,6 +183,14 @@ def get_feat(object, index):
             "id",
         ]
 
+    if object == 'prestamo':
+        object= [
+            "libro",
+            "usuario",
+            "fecha_prestamo",
+            "fecha_devolucion",
+        ]
+
     try:
         return object[index]
     except (IndexError, ValueError):
@@ -183,33 +199,20 @@ def get_feat(object, index):
         )
         return False
 
-
 # Define the path for libros.json
 libro_path = json_data_path("libros")
 
-
 # CRUD books
 def add_book(libro: Libro):
-    while True:
-        print("Desea guardar el libro?")
-        print("1. Si\t2. No (Volver)")
-        option = input("Ingresar opcion: ")
-
-        if not validate_menu_options(option, type="dual"):
-            continue
-
-        if option == "1":
-            data = retrieve_data(libro_path, 'libro')
-            if not data.get("libros", None):
-                data = {"libros": []}
-            data["libros"].append(libro)
-            save(libro_path, data)
-            print("\nLibro guardado exitosamente.")
-            return True
-
-        print("Abortando operacion...")
-        return
-
+    data = retrieve_data(libro_path, 'libro')
+    if not data.get("libros", None):
+        data = {"libros": []}
+    data["libros"].append(libro)
+    if save(libro_path, data):
+        return True
+    else: 
+        print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+        return False
 
 def find_book(filter_by: str, feature: str):
     data = retrieve_data(libro_path, 'libro')
@@ -223,34 +226,35 @@ def find_book(filter_by: str, feature: str):
     return filtered_data
 
 
-def upd_book(book):
-    del_book(book.id)  # Remove the old book entry
+def upd_book(book: Libro):
+    del_book(book.id) 
     data = retrieve_data(libro_path, 'libro')
-    data["libros"].insert(
-        int(book.id) - 1, book
-    )  # Update the book attribute in the data
-    save(libro_path, data)  # Save the updated data
-    print(f"\nLibro actualizado exitosamente.")
-    return True
+    if isinstance(book, Libro):
+        data["libros"].insert(int(book.id) - 1, book)   # Update the data with the new updated book                  
+        if save(libro_path, data):
+            return True
+        else:
+            print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+    return False
 
 
 def del_book(identification: str | list, mode="single", sort=False):
-    rm_book = None
+    rmd_book = None
     i = None
     data = retrieve_data(libro_path, 'libro')
     if mode == "multi":
-        rm_book = []
+        rmd_book = []
         for id in identification:
             for j, libro in enumerate(data["libros"]):
                 if libro.id == id:
                     if i is None:
                         i = j
-                    rm_book.append(data["libros"].pop(j))
+                    rmd_book.append(data["libros"].pop(j))
 
     if mode == "single":
         for i, book in enumerate(data["libros"]):
             if book.id == identification:
-                rm_book = data["libros"].pop(i)
+                rmd_book = data["libros"].pop(i)
                 break
 
     if sort:
@@ -260,13 +264,14 @@ def del_book(identification: str | list, mode="single", sort=False):
 
         data["libros"].sort(key=lambda x: x.id)
 
-    save(libro_path, data)
-    return rm_book
+    if save(libro_path, data):
+        return rmd_book
+    else:
+        print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
 
 
 # Define the path for usuarios.json
 usuario_path = json_data_path("usuarios")
-
 
 # Add, search users
 def add_user(usuario):
@@ -283,12 +288,12 @@ def add_user(usuario):
             if not data.get("usuarios"):
                 data = {"usuarios": []}
             data["usuarios"].append(usuario)
-            save(usuario_path, data)
-            print("\nUsuario guardado exitosamente.")
-            return True
-
-        print("Abortando operacion...")
-        return
+            if save(usuario_path, data):
+                print("\nUsuario guardado exitosamente.")
+                return True
+            else:
+                print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+            return False
 
 def find_user(filter_by: str, feature: str):
     data = retrieve_data(usuario_path, 'usuario')

@@ -11,26 +11,24 @@ from services.biblioteca_service import (
     libro_path,
 )
 from models.libro import Libro
-from textwrap import dedent
 
 
 def gestion_libros():
     while True:
         try:
-            print(
-                dedent(
-                    """
-            Gestionar libros:
-                1. Buscar por categoria
-                2. Ingresar nuevo libro
-                3. Actualizar
-                4. Eliminar
-                
-                0. Volver
-            """
-                )
-            )
+            print((
+                    "\nGestionar libros:\n"
+                    "    1. Buscar por categoria\n"
+                    "    2. Ingresar nuevo libro\n"
+                    "    3. Actualizar\n"
+                    "    4. Eliminar\n\n"
+                    "    0. Volver\n"
+            ))
+
             option = input("Ingresar opcion: ")
+
+            if not validate_menu_options(option, min_args= 0, max_args= 4,):
+                continue
 
             match option:
                 case "0":
@@ -53,9 +51,9 @@ def gestion_libros():
 
                         if not validate_menu_options(
                             option,
-                            get_feat("libro", option),
                             type="category",
                             max_args=7,
+                            object_name= get_feat("libro", option),
                         ):
                             continue
 
@@ -106,6 +104,28 @@ def gestion_libros():
                         new_libro = Libro(
                             titulo, genero, autor, editorial, publicacion, autoincrement()
                         )
+
+                        while True:
+                            print(f"\nVista previa:\n{new_libro}")
+                            print("Desea guardar el libro?")
+                            print("1. Si    2. No (Volver)")
+                            option = input("Ingresar opcion: ")
+
+                            if not validate_menu_options(option, type="dual", min_args=1, max_args=2):
+                                continue
+
+                            if option == '2':
+                                print("Abortando operacion...")
+                                break
+
+                            if option == "1":
+                                if add_book(new_libro):
+                                    print("\nLibro guardado exitosamente.")
+                                else:  
+                                    print("Abortando operacion...")
+                                return
+                        break
+
                     else:
                         new_libro = Libro(  # Test data
                             titulo="El Principito",
@@ -116,8 +136,7 @@ def gestion_libros():
                             id=autoincrement(),
                         )
 
-                    print(f"\nVista previa:\n{new_libro}")
-                    add_book(new_libro)
+                        add_book(new_libro)
 
                 case "3":
                     while True:
@@ -160,9 +179,9 @@ def gestion_libros():
 
                             if not validate_menu_options(
                                 modificar,
-                                input=get_feat("libro", modificar),
                                 type="category",
-                                max_args=6,
+                                max_args=5,
+                                object_name= get_feat("libro", modificar),
                             ):
                                 continue
 
@@ -180,7 +199,7 @@ def gestion_libros():
                                 save = input("Ingresar opcion: ")
 
                                 if not validate_menu_options(
-                                    save, mode="equal", max_args=2, min_args=1
+                                    save, mode="equal", min_args=1, max_args=2,
                                 ):
                                     continue
 
@@ -188,7 +207,10 @@ def gestion_libros():
                                     print()
                                     break
 
-                                upd_book(book)
+                                if upd_book(book):
+                                    print(f"\nLibro actualizado exitosamente.")
+                                else:
+                                    print(f"Se ha presentado un error al intentar guardar el libro. Por favor intentelo de nuevo")
                                 return
 
                 case "4":
@@ -230,7 +252,7 @@ def gestion_libros():
                             option = input("Ingresar opcion: ")
 
                             if not validate_menu_options(
-                                option, mode="equal", max_args=2, min_args=1
+                                option, mode="equal", min_args=1, max_args=2,
                             ):
                                 continue
 

@@ -9,14 +9,15 @@ class Usuario:
 
 
     def __str__(self):
-        return f"""
-        Nombre: {self.nombre}
-        Apellido: {self.apellido}
-        Correo: {self.correo}
-        Telefono: {self.telefono}
-        Direccion de Residencia: {self.residencia}
-        Afiliacion: {'Afiliado' if self.afiliacion else 'No afiliado'}
-        """
+        return (
+                "Detalles del Usuario:\n"
+                f"Nombre: {self.nombre}\n"
+                f"Apellido: {self.apellido}\n"
+                f"Correo: {self.correo}\n"
+                f"Telefono: {self.telefono}\n"
+                f"Direccion de Residencia: {self.residencia}\n"
+                f"Afiliacion: {'Afiliado' if self.afiliacion else 'No afiliado'}"
+        )
         
     def to_dict(self):
         return {

@@ -1,7 +1,7 @@
 {
   "libros": [
     {
-      "id": "2",
+      "id": "1",
       "titulo": "La sombra del viento",
       "genero": "Novela",
       "autor": "Carlitos",
@@ -9,7 +9,7 @@
       "fecha_publicacion": "10/10/1997"
     },
     {
-      "id": "3",
+      "id": "2",
       "titulo": "El Coronel No Tiene Quien Le Escriba",
       "genero": "Realismo magico",
       "autor": "Grabriel Garcia Marquez",
