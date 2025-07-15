@@ -14,12 +14,14 @@ def validate_input_format(input, mode="simple_format", special_chars: str= None,
             return True
         
         if isinstance(special_chars, str):
-            special_chars= re.fullmatch(r"[\W]+", special_chars)
+            pass
         elif not (special_chars is None):
             print("Error: El argumento special_chars debe ser una cadena de caracteres.")
             print("Por lo tanto, puede que el resultado no sea el esperado.")
 
-        if re.fullmatch(rf"[a-zA-Z0-9\s{special_chars}]+",  input):
+        escaped_special_chars = re.escape(special_chars) if special_chars else ''
+
+        if re.fullmatch(rf"[a-zA-Z0-9\s{escaped_special_chars}]+",  input):
             return True
         print(
             "Error: El valor ingresado es invalido, por favor evitar caracteres speciales como #$%@."
@@ -140,9 +142,9 @@ def save(path, data: list):
         )
 
 
-def autoincrement(pos=-1, object_type= 'libro'):
+def autoincrement(pos=-1):
     result = None
-    data = retrieve_data(libro_path, object_type)
+    data = retrieve_data(libro_path, 'libro')
     try:
         result = int(data["libros"][pos].id) + 1
     except KeyError:
@@ -227,20 +229,22 @@ def find_book(filter_by: str, feature: str):
 
 
 def upd_book(book: Libro):
-    del_book(book.id) 
-    data = retrieve_data(libro_path, 'libro')
-    if isinstance(book, Libro):
-        data["libros"].insert(int(book.id) - 1, book)   # Update the data with the new updated book                  
-        if save(libro_path, data):
-            return True
-        else:
-            print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
-    return False
+    if del_book(book.id):
+        data = retrieve_data(libro_path, 'libro')
+        if isinstance(book, Libro):
+            data["libros"].insert(int(book.id) - 1, book)   # Update the data with the new updated book                  
+            if save(libro_path, data):
+                return True
+            else:
+                print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+                return False
+    print("Error al eliminar libro en base de datos")
 
 
 def del_book(identification: str | list, mode="single", sort=False):
     rmd_book = None
     i = None
+    
     data = retrieve_data(libro_path, 'libro')
     if mode == "multi":
         rmd_book = []
@@ -264,17 +268,20 @@ def del_book(identification: str | list, mode="single", sort=False):
 
         data["libros"].sort(key=lambda x: x.id)
 
-    if save(libro_path, data):
-        return rmd_book
-    else:
-        print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+    if rmd_book:
+        if save(libro_path, data):
+            return rmd_book
+        else:
+            print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+    return False
+
 
 
 # Define the path for usuarios.json
 usuario_path = json_data_path("usuarios")
 
 # Add, search users
-def add_user(usuario):
+def add_user(user: Usuario):
     while True:
         print("Desea guardar el usuario?")
         print("1. Si\t2. No (Volver)")
@@ -287,7 +294,7 @@ def add_user(usuario):
             data = retrieve_data(usuario_path, 'usuario')
             if not data.get("usuarios"):
                 data = {"usuarios": []}
-            data["usuarios"].append(usuario)
+            data["usuarios"].append(user)
             if save(usuario_path, data):
                 print("\nUsuario guardado exitosamente.")
                 return True
