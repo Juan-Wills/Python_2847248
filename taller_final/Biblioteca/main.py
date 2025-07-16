@@ -1,8 +1,7 @@
 import sys
 from views.view_libros import gestion_libros
 from views.view_usuarios import gestion_usuarios
-# from views.view_prestamos import gestion_prestamos
-# from views.view_multas import gestion_multas
+from views.view_prestamos import gestion_prestamos, gestion_multas
 
 def main():
     try:
@@ -25,9 +24,9 @@ def main():
                 case '2':
                     gestion_usuarios()
                 case '3':
-                    pass
+                    gestion_prestamos
                 case '4':
-                    pass
+                    gestion_multas()
                 case _:
                     print('Valor ingresado no valido, ingrese un valor que corresponda a las opciones del menu de navegacion.')
     except (KeyboardInterrupt, EOFError):

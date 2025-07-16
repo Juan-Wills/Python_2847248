@@ -1,7 +1,8 @@
 import datetime
 
 class Prestamo:
-    def __init__(self, libro, usuario, fecha_devolucion, fecha_prestamo=None):
+    def __init__(self, id, libro, usuario, fecha_devolucion, fecha_prestamo=None):
+        self.id = id
         self.libro = libro
         self.usuario = usuario
         self.fecha_prestamo = fecha_prestamo if fecha_prestamo is not None else datetime.date.today()

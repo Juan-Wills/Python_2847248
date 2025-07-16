@@ -142,11 +142,19 @@ def save(path, data: list):
         )
 
 
-def autoincrement(pos=-1):
+def autoincrement(obj_name, data_file, pos=-1):
     result = None
-    data = retrieve_data(libro_path, 'libro')
+    if isinstance(obj_name, str):
+        if obj_name == 'prestamo' or obj_name == 'libro' or obj_name == 'usuario':
+            obj_name = obj_name.lower()
+        else:
+            print("Error: El nombre del objeto debe ser 'prestamo', 'libro' o 'usuario'.")
+            return False
+    
+    data = retrieve_data(data_file, obj_name)
+    
     try:
-        result = int(data["libros"][pos].id) + 1
+        result = int(data[obj_name][pos].id) + 1
     except KeyError:
         result = "1"
     return str(result)
@@ -187,6 +195,7 @@ def get_feat(object: str, index : str):
 
     if object == 'prestamo':
         object= [
+            "id",
             "libro",
             "usuario",
             "fecha_prestamo",
