@@ -63,21 +63,24 @@ def gestion_libros():
                                 print('-'*20)
                             break
 
+                        attribute = get_feat("prestamo", option)
+
                         if not validate_menu_options(
                             option,
                             type="category",
                             max_args=7,
-                            object_name= get_feat("libro", option),
+                            object_name='prestamo',
                         ):
                             continue
 
                         filter = input("Buscar: ").title().strip()
-                        if books := find_book(get_feat("libro", option), filter):
+                        
+                        if books := find_book(attribute, filter):
                             for book in books:
                                 print(book)
                             break
                         print(
-                            f"No se encontraron libros con la caracteristica {get_feat('libro', option).replace('_', ' de ').capitalize()}: {filter}.\n"
+                            f"No se encontraron registros de prestamos con la caracteristica {attribute.replace('_', ' de ').capitalize()}: {filter}.\n"
                         )
                         continue
 

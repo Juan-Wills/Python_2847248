@@ -149,14 +149,18 @@ def gestion_usuarios():
                         ):
                             continue
 
+                        attribute = get_feat("usuario", option)
                         feature = input("Buscar: ").strip()
-                        if users := find_user(get_feat("usuario", option), feature):
+
+                        if users := find_user(attribute, feature):
                             for user in users:
                                 print(user)
                                 print('-'*20)
                             break
                         else:
-                            print("No se encontraron usuarios con ese criterio.")
+                            print(
+                                f"No se encontraron libros con la caracteristica {attribute.replace('_', ' de ').capitalize()}: {filter}.\n"
+                            )
                             continue
                 case "3":
                      while True:
@@ -207,7 +211,7 @@ def gestion_usuarios():
                                 modificar,
                                 type="category",
                                 max_args=6,
-                                object_name= attribute,
+                                object_name= 'usuario',
                             ):
                                 continue
 
@@ -298,5 +302,6 @@ def gestion_usuarios():
         except (KeyboardInterrupt, EOFError):
             print("\nPrograma cerrado forzosamente")
             return
+        
 if __name__ == "__main__":
     gestion_usuarios()

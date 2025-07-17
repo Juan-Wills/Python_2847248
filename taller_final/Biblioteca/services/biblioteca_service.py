@@ -216,6 +216,7 @@ def get_feat(object_name: str, index : str) -> str | bool:
             "fecha_prestamo",
             "fecha_devolucion",
             "id",
+            "multa",
         ]
 
     try:
@@ -227,10 +228,11 @@ def get_feat(object_name: str, index : str) -> str | bool:
         return False
 
 # --------------------------------------------------------------------------------------------------- #
+# Books data from json file
+data= retrieve_data('libros.json', 'libro')
 
 # CRUD books
 def add_book(libro: Libro) -> bool:
-    data = retrieve_data('libros.json', 'libro')
     if not data.get("libros", None):
         data = {"libros": []}
     data["libros"].append(libro)
@@ -246,8 +248,6 @@ def add_book(libro: Libro) -> bool:
 
 
 def find_book(filter_by: str, feature: str, all=False) -> list | bool:
-    data = retrieve_data('libros.json', 'libro')
-
     if all:
         return data["libros"]
 
@@ -263,25 +263,24 @@ def find_book(filter_by: str, feature: str, all=False) -> list | bool:
 
 
 def upd_book(book: Libro) -> bool:
-    if del_book(book.id):
-        data = retrieve_data('libros.json', 'libro')
+    if isinstance(book, Libro):
+        for i, b in enumerate(data["libros"]):
+            if b.id == book.id:
+                data["libros"][i] = book
+                break
 
-        if isinstance(book, Libro):
-            data["libros"].insert(int(book.id) - 1, book)
+        if test_mode:
+            return True             
 
-            if test_mode:
-                return True             
-
-            if save(json_data_path('libros.json'), data):
-                return True
-            else:
-                print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
-                return False
+        if save(json_data_path('libros.json'), data):
+            return True
+        else:
+            print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+            return False
 
 
 def del_book(identification: str | list, mode="single", sort=False) -> list | bool:
     rmd_book = [] 
-    data = retrieve_data('libros.json', 'libro')
 
     if mode == "multi":
         for id in identification:
@@ -314,11 +313,11 @@ def del_book(identification: str | list, mode="single", sort=False) -> list | bo
             print("Error: No se pudo eliminar libro en la base de datos")
     return False
 
+# Users data from json fil
+data= retrieve_data('libros.json', 'libro')
 
 # CRUD users
 def add_user(user: Usuario) -> bool:
-    data = retrieve_data('usuarios.json', 'usuario')
-
     if not data.get("usuarios"):
         data = {"usuarios": []}
     data["usuarios"].append(user)
@@ -335,8 +334,6 @@ def add_user(user: Usuario) -> bool:
 
 
 def find_user(filter_by: str, feature: str, all=False) -> list | bool:
-    data = retrieve_data('usuarios.json', 'usuario')
-
     if all:
         return data["usuarios"]
     
@@ -350,11 +347,11 @@ def find_user(filter_by: str, feature: str, all=False) -> list | bool:
     return filtered_data
 
 def upd_user(user: Usuario) -> bool:
-    if del_user(user.id):
-        data = retrieve_data('usuarios.json', 'usuario')
-        
-        if isinstance(user, Usuario):
-            data["usuarios"].insert(int(user.id) - 1, user) 
+    if isinstance(user, Usuario):
+        for i, u in enumerate(data["usuarios"]):
+            if u.id == user.id:
+                data["usuarios"][i] = user
+                break
 
             if test_mode:
                 return True
@@ -367,7 +364,6 @@ def upd_user(user: Usuario) -> bool:
 
 
 def del_user(identification: str | list, mode="single", sort=False) -> list | bool:
-    data = retrieve_data('usuarios.json', 'usuario')
     rmd_user = [] 
     
     if mode == "multi":
@@ -402,9 +398,11 @@ def del_user(identification: str | list, mode="single", sort=False) -> list | bo
             print("Error: No se pudo eliminar al usuario la base de datos")
     return False
 
+# Loans data from json file
+data= retrieve_data('prestamos.json', 'prestamo')
+
 # CRUD loans
 def add_loan(loan: Prestamo):
-    data = retrieve_data('prestamos.json', 'prestamo')
     data["prestamos"].append(loan)
 
     if test_mode:
@@ -417,8 +415,6 @@ def add_loan(loan: Prestamo):
 
 
 def find_loan(filter_by: str, feature: str, all=False):
-    data = retrieve_data('prestamos.json', 'prestamo')
-
     if all:
         return data["prestamos"]
     
@@ -431,55 +427,70 @@ def find_loan(filter_by: str, feature: str, all=False):
     return filtered_data
 
 
-def upd_loan(loan: Prestamo):
-    if del_loan(loan.id):
-        data = retrieve_data('prestamos.json', 'prestamo')
-
-        if isinstance(loan, Prestamo):
-            data["prestamos"].insert(int(loan.id) - 1, loan)
-
-            if test_mode:
-                return True
-
-            if save(json_data_path('prestamos.json'), data):
-                return True
-            else:
-                print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
-                return False
-
-
-def del_loan(identification: str | list, mode="single", sort=False):
-    rmd_loan = [] 
-    data = retrieve_data('prestamos.json', 'prestamo')
-
-    if mode == "multi":
-        for id in identification:
-            for j, prestamo in enumerate(data["prestamos"]):
-                if prestamo.id == id:
-                    if i is None:
-                        i = j
-                    rmd_loan.append(data["prestamos"].pop(j))
-
-    if mode == "single":
-        for i, book in enumerate(data["prestamos"]):
-            if book.id == identification:
-                rmd_loan = data["prestamos"].pop(i)
+def upd_loan_devolution(loan: Prestamo):
+    if isinstance(loan, Prestamo):
+        for i, l in enumerate(data["prestamos"]):
+            if l.id == loan.id:
+                loan.multa = 0
+                data["prestamos"][i] = loan
                 break
 
-    if sort:
-        for book in data["prestamos"][i:]:
-            book.id = autoincrement("prestamo", 'prestamos.json', pos= i - 1)
-            i += 1
-
-        data["prestamos"].sort(key=lambda x: x.id)
-
-    if rmd_loan:
-
         if test_mode:
-            return rmd_loan
+            return True
 
         if save(json_data_path('prestamos.json'), data):
-            return rmd_loan
+            return True
         else:
-            print("Error: No se pudo eliminar el prestamo en la base de datos")
-    return False
+            print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+            return False
+
+# Search and update fines
+def find_fine(filter_by: str, feature: str, all= False):
+    if all:
+        return data["prestamos"]
+    
+    filtered_data= list(
+        filter(lambda x: re.search(feature, getattr(x, filter_by), flags= re.I), data["prestamos"])
+    )  # Filter loans by the specified feature
+
+    if len(filtered_data) == 0:
+        return False
+    
+    for loan in filtered_data:
+        if loan.vencido():
+            print(f"El prestamo del libro '{loan.libro.titulo}' al usuario '{loan.usuario.nombre}' esta vencido.")
+            loan.actualizar_multa()
+        else:
+            print(f"El prestamo del libro '{loan.libro.titulo}' al usuario '{loan.usuario.nombre}' no tiene multa pendiente.")
+    return filtered_data
+
+
+def pay_fine(loan: Prestamo, to_pay: int) -> bool:
+    for i, loan in enumerate(data["prestamos"]):
+
+        if loan.id == loan.id:
+
+            if loan.vencido():
+                
+                if loan.pagar_multa(to_pay) != 0:
+                    print("Valor insuficiente para pagar multa, por favor ingrese el valor exacto.")
+                    print(f"Valor de multa pendiente: ${loan.multa}")
+                    return False
+                break
+            else:
+                print(f"El prestamo del libro '{loan.libro.titulo}' no tiene multa pendiente.")
+                return False
+
+        data["prestamos"][i] = loan
+
+        return True
+                
+        if test_mode:
+            return True
+        
+        if save(json_data_path('prestamos.json'), data):
+            return True
+        else:
+            print("Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo")
+            return False
+        

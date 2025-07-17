@@ -18,7 +18,7 @@ class Prestamo:
             return True
         return False
     
-    def aumentar_multa(self):
+    def actualizar_multa(self):
         aumento= 0
         today= datetime.date.today()
         if self.fecha_devolucion < today:
@@ -31,8 +31,7 @@ class Prestamo:
     def pagar_multa(self, valor):
         if (self.multa - valor) == 0:
             self.multa-= valor
-            return self.multa
-        return False
+        return self.multa
 
     def __str__(self):
         return (f"Detalles de Prestamo:\n"

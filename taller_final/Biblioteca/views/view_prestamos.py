@@ -1,9 +1,11 @@
+from datetime import datetime
 from services.biblioteca_service import (
     add_loan,
-    upd_loan,
     find_loan,
-    del_loan,
+    upd_loan_devolution,
     find_book,
+    find_fine,
+    pay_fine,
     find_user,
     validate_input_format,
     validate_menu_options,
@@ -143,11 +145,75 @@ def gestion_prestamos():
 
 
                 case "2":
-                    print("\nVer registro de prestamos")
+                    while True:
+                        print("\nVer registros de prestamos")
+                        print("Elegir categoria: ")
+                        print(
+                            "1. Libro    2. Usuario    3. Fecha de Prestamo    4. Fecha de Devolucion    5. ID    6. Deuda acumulada    7. Ver todos"
+                        )
+                        option = input("Ingresar opcion: ")
+
+                        if option == "7":
+                            for loan in find_loan('', '', all=True):
+                                print(loan)
+                                print('-'*20)
+                            break
+
+                        if not validate_menu_options(
+                            option,
+                            type="category",
+                            max_args=7,
+                            object_name= 'libro',
+                        ):
+                            continue
+                        
+                        attribute= get_feat("libro", option)
+                        filter = input("Buscar: ").title().strip()
+
+                        if loans := find_loan(attribute, filter):
+                            for loan in loans:
+                                print(loan)
+                            break
+                        print(
+                            f"No se encontraron libros con la caracteristica {attribute.replace('_', ' de ').capitalize()}: {filter}.\n"
+                        )
+                        continue
 
                 case "3":
-                    print("\nRegistrar devolucion")
+                    while True:
+                        print("\nRegistrar devolucion")
+                        id_loan= input("Ingrese el ID del prestamo: ")
 
+                        if loan:= find_loan("id", id_loan):
+                            print(f"\nVista previa:\n{loan}")
+                            print("Es este el prestamo esperado?")
+                            print("1. Confirmar    2. Rechazar")
+                            option = input("Ingresar opcion: ")
+
+                            if not validate_menu_options(
+                                option, mode="equal", max_args=2, min_args=1
+                            ):
+                                continue
+
+                            if option == "2":
+                                print("Operacion cancelada")
+                                continue
+
+                            while True:
+                                devolution_date = input(
+                                    "Ingrese la fecha de devolucion (opcional): "
+                                ).strip()
+                                if validate_input_format(devolution_date, mode="date", optional=True):
+                                    continue
+
+                                if len(devolution_date) == 0:
+                                    devolution_date = datetime.date.today()
+
+                                loan.fecha_devolucion = devolution_date
+
+                                upd_loan_devolution(loan)
+                                print(f"\nPrestamo del libro '{loan.libro.titulo}' al usuario '{loan.usuario.correo}' actualizado exitosamente.")
+                                break
                 case _:
                     print(
                         "Valor ingresado no valido, ingrese un valor que corresponda a las opciones del menu de navegacion."
@@ -163,12 +229,11 @@ def gestion_multas():
             print(
                 (
                     "\nGestionar Multas\n"
-                    "    1. Pagar multa\n"
-                    "    2. Ver registro de multas\n\n"
+                    "    1. Ver registro de multas\n\n"
+                    "    2. Pagar multa\n"
                     "    0. Volver\n"
                 )
             )
-
             option = input("Ingresar opcion: ")
 
             if not validate_menu_options(option, max_args=2, min_args=0):
@@ -177,14 +242,107 @@ def gestion_multas():
             match option:
                 case "0":
                     return
-                case "1":
-                    # Implementar logica para pagar multa
-                    pass
-                
                 case "2":
-                    # Implementar logica para ver multas
-                    pass
-                    
+                    while True:
+                        print("\nPagar multa pendiente")
+                        id_loan= input("Ingresa el ID del prestamo: ")
+
+                        if loan:= find_loan("id", id_loan):
+                            print(f"\nVista previa:\n{loan}")
+                            print("Es este el prestamo esperado?")
+                            print("1. Confirmar    2. Rechazar")
+                            option = input("Ingresar opcion: ")
+
+                            if not validate_menu_options(
+                                option, mode="equal", max_args=2, min_args=1
+                            ):
+                                continue
+
+                            if option == "2":
+                                print("Operacion cancelada")
+                                continue
+
+                            while True:
+                                valor = input("Ingrese el valor a pagar: ").strip()
+                                if not valor.isdigit():
+                                    print("El valor debe ser un numero entero.")
+                                    continue
+
+                                valor = int(valor)
+
+                                if valor <= 0:
+                                    print("El valor debe ser mayor a 0.")
+                                    continue
+
+                                if pay_fine(loan, valor):
+                                    print(f"La multa ha sido pagada exitosamente.")
+                                    print(f"Deuda actualizada: {loan.multa}")
+                                break
+                            break
+                        else:
+                            print(
+                                "El ID de prestamo ingresado no se encuentra en la base de datos, por favor verifique la informacion."
+                            )
+                            continue
+                
+                case "1":
+                    while True:
+                        print("\nVer registro de multas")
+                        print("Elegir categoria: ")
+                        print(
+                            "5. ID    6. Deuda acumulada    7. Ver todos"
+                        )
+                        option = input("Ingresar opcion: ")
+
+                        if option == "7":
+                            for loan in find_fine('', '', all=True):
+                                print(loan)
+                                print('-'*20)
+                            break
+
+                        if option == "6":
+                            while True:
+                                print("Se mostraran los prestamos con deuda menor o igual al valor a ingresar,\nDesea ver los resultados mayores o iguales?.")
+                                print("1. Si    2. No")
+                                greater_than= input("Ingresar opcion: ")
+
+                                if not validate_menu_options(
+                                    greater_than, mode="equal", max_args=2, min_args=1
+                                ):
+                                    continue
+
+                                if greater_than == "1":
+                                    greater_than = True
+                                elif greater_than == "2":
+                                    greater_than = False
+                                break
+
+                        if not validate_menu_options(
+                            option,
+                            type="category",
+                            max_args=7,
+                            object_name= 'libro',
+                        ):
+                            continue
+                        
+                        attribute= get_feat("libro", option)
+                        filter = input("Buscar: ").title().strip()
+
+                        if loans := find_fine(attribute, filter):
+                            for loan in loans:
+                                if attribute == "multa":
+                                    if greater_than:
+                                        if loan.multa >= int(filter):
+                                            print(loan)
+                                    else:
+                                        if loan.multa <= int(filter):
+                                            print(loan)
+                                else:
+                                    print(loan)
+                            break
+                        print(
+                            f"No se encontraron libros con la caracteristica {attribute.replace('_', ' de ').capitalize()}: {filter}.\n"
+                        )
                 case _:
                     print(
                         "Valor ingresado no valido, ingrese un valor que corresponda a las opciones del menu de navegacion."
