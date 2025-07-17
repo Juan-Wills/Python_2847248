@@ -1,5 +1,3 @@
-import sys
-sys.path.append('C:/Users/juand/Documents/Python/Python_2847248/taller_final/Biblioteca/')
 from services import biblioteca_service as bs
 from models.libro import Libro
 from models.usuario import Usuario
@@ -65,3 +63,15 @@ def test_retrieve_data():
     # Test retrieving data from a non-existing file
     data = bs.retrieve_data('non_existing_file.json')
     assert data is None  # Assuming it returns None for non-existing files
+
+def test_autoincrement():
+    # Test autoincrement function
+    current_id = bs.autoincrement('prestamo', bs.json_data_path('prestamos'))
+    assert isinstance(current_id, int)
+    assert current_id > 0  # Assuming IDs start from 1
+
+    # Test autoincrement with an empty file
+    with open('test_autoincrement.json', 'w') as f:
+        f.write('[]')
+    current_id = bs.autoincrement()
+    assert current_id == 1  # Assuming it starts from 1 for an empty file

@@ -1,7 +1,7 @@
 import datetime
 
 class Prestamo:
-    def __init__(self, id, libro, usuario, fecha_devolucion, fecha_prestamo=None):
+    def __init__(self, id, libro, usuario, fecha_prestamo, fecha_devolucion):
         self.id = id
         self.libro = libro
         self.usuario = usuario

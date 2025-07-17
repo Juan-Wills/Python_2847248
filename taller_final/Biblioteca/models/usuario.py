@@ -1,5 +1,6 @@
 class Usuario:
-    def __init__(self, nombre, apellido, correo, residencia='', telefono='', afiliacion= False):
+    def __init__(self, id, nombre, apellido, correo, residencia='', telefono='', afiliacion= False):
+        self.id = id
         self.nombre= nombre
         self.apellido= apellido
         self.correo= correo
@@ -11,6 +12,7 @@ class Usuario:
     def __str__(self):
         return (
                 "Detalles del Usuario:\n"
+                f"ID: {self.id}\n"
                 f"Nombre: {self.nombre}\n"
                 f"Apellido: {self.apellido}\n"
                 f"Correo: {self.correo}\n"
@@ -20,11 +22,4 @@ class Usuario:
         )
         
     def to_dict(self):
-        return {
-            'nombre': self.nombre,
-            'apellido': self.apellido,
-            'correo': self.correo,
-            'residencia': self.residencia,
-            'telefono': self.telefono,
-            'afiliacion': self.afiliacion
-        }
+        return vars(self)

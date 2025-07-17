@@ -3,25 +3,39 @@ from services.biblioteca_service import (
     find_book,
     del_book,
     upd_book,
-    retrieve_data,
     validate_input_format,
     validate_menu_options,
     autoincrement,
     get_feat,
-    libro_path,
 )
 from models.libro import Libro
+from tests.test_views import test_mode
 
 
 def gestion_libros():
+    """
+    if test_mode:
+        print("Modo de prueba activado. No se guardaran cambios en los libros.")
+        new_libro = Libro( 
+                        titulo="El Principito",
+                        genero="Ficcion",
+                        autor="Antoine de Saint-Exupery",
+                        editorial="Reynal & Hitchcock",
+                        fecha_publicacion="1943",
+                        id=autoincrement(),
+                    )
+
+        add_book(new_libro)
+        return
+    """
     while True:
         try:
             print((
                     "\nGestionar libros:\n"
-                    "    1. Buscar por categoria\n"
-                    "    2. Ingresar nuevo libro\n"
-                    "    3. Actualizar\n"
-                    "    4. Eliminar\n\n"
+                    "    1. Ingresar nuevo libro\n"
+                    "    2. Buscar por categoria\n"
+                    "    3. Actualizar libro\n"
+                    "    4. Eliminar libro\n\n"
                     "    0. Volver\n"
             ))
 
@@ -34,19 +48,19 @@ def gestion_libros():
                 case "0":
                     return
 
-                case "1":
+                case "2":
                     while True:
                         print("\nFiltrar libros")
                         print("Elegir categoria: ")
                         print(
-                            "1. Titulo    2. Autor    3. Genero    4. Editorial    5. Fecha    6. Id    7. Todo"
+                            "1. Titulo    2. Autor    3. Genero    4. Editorial    5. Fecha    6. Id    7. Ver todos"
                         )
                         option = input("Ingresar opcion: ")
 
                         if option == "7":
-                            data = retrieve_data(libro_path)
-                            for book in data["libros"]:
+                            for book in find_book('', '', all=True):
                                 print(book)
+                                print('-'*20)
                             break
 
                         if not validate_menu_options(
@@ -67,76 +81,55 @@ def gestion_libros():
                         )
                         continue
 
-                case "2":
+                case "1":
                     print("\nAgregar nuevo libro")
                     print("Ingrese los datos del libro:")
+                    while True:
+                        titulo = input("Titulo: ").title().strip()
+                        if validate_input_format(titulo):
+                            break
 
-                    # Usar para pruebas
-                    test= False
-                    
-                    # Recolectar la informacion del libro
-                    if not test:
-                        while True:
-                            titulo = input("Titulo: ").title().strip()
-                            if validate_input_format(titulo):
-                                break
+                    while True:
+                        genero = input("Genero: ").capitalize().strip()
+                        if validate_input_format(genero):
+                            break
 
-                        while True:
-                            genero = input("Genero: ").capitalize().strip()
-                            if validate_input_format(genero):
-                                break
+                    while True:
+                        autor = input("Autor: ").title()
+                        if validate_input_format(autor):
+                            break
 
-                        while True:
-                            autor = input("Autor: ").title()
-                            if validate_input_format(autor):
-                                break
+                    while True:
+                        publicacion = input("Fecha de Publicacion: ").strip()
+                        if validate_input_format(publicacion):
+                            break
 
-                        while True:
-                            publicacion = input("Fecha de Publicacion: ").strip()
-                            if validate_input_format(publicacion):
-                                break
+                    while True:
+                        editorial = input("Editorial: ").title().strip()
+                        if validate_input_format(editorial):
+                            break
 
-                        while True:
-                            editorial = input("Editorial: ").title().strip()
-                            if validate_input_format(editorial):
-                                break
+                    new_libro = Libro(
+                        titulo, genero, autor, editorial, publicacion, autoincrement()
+                    )
 
-                        new_libro = Libro(
-                            titulo, genero, autor, editorial, publicacion, autoincrement()
-                        )
+                    while True:
+                        print(f"\nVista previa:\n{new_libro}")
+                        print("Desea guardar el libro?")
+                        print("1. Si    2. No (Volver)")
+                        option = input("Ingresar opcion: ")
 
-                        while True:
-                            print(f"\nVista previa:\n{new_libro}")
-                            print("Desea guardar el libro?")
-                            print("1. Si    2. No (Volver)")
-                            option = input("Ingresar opcion: ")
+                        if not validate_menu_options(option, type="dual", min_args=1, max_args=2):
+                            continue
 
-                            if not validate_menu_options(option, type="dual", min_args=1, max_args=2):
-                                continue
-
-                            if option == '2':
-                                print("Abortando operacion...")
-                                break
-
-                            if option == "1":
-                                if add_book(new_libro):
-                                    print("\nLibro guardado exitosamente.")
-                                else:  
-                                    print("Abortando operacion...")
-                                return
-                        break
-
-                    else:
-                        new_libro = Libro(  # Test data
-                            titulo="El Principito",
-                            genero="Ficcion",
-                            autor="Antoine de Saint-Exupery",
-                            editorial="Reynal & Hitchcock",
-                            fecha_publicacion="1943",
-                            id=autoincrement(),
-                        )
+                        if option == '2':
+                            print("Abortando operacion...")
+                            break
 
                         add_book(new_libro)
+                        print(f"\nLibro '{new_libro.titulo}' guardado exitosamente.")
+                        break
+                    break
 
                 case "3":
                     while True:
@@ -166,7 +159,7 @@ def gestion_libros():
                             )
                             continue
 
-                        book = book[0]
+                        book = next(book)
                         print("Informacion original")
                         print(book)
 
@@ -194,7 +187,7 @@ def gestion_libros():
 
                             while True:
                                 print(f"\nVista previa:\n{book}")
-                                print("\nDesea realizar mas cambios?")
+                                print("\nGuardar cambios?")
                                 print("1. Si\t2. No")
                                 save = input("Ingresar opcion: ")
 
@@ -204,47 +197,44 @@ def gestion_libros():
                                     continue
 
                                 if save == "1":
-                                    print()
-                                    break
 
-                                if upd_book(book):
-                                    print(f"\nLibro actualizado exitosamente.")
+                                    if upd_book(book):
+                                        print(f"\nLibro actualizado exitosamente.")
+                                    else:
+                                        print(f"Se ha presentado un error al intentar guardar el libro. Por favor intentelo de nuevo")
+                                    return
                                 else:
-                                    print(f"Se ha presentado un error al intentar guardar el libro. Por favor intentelo de nuevo")
-                                return
+                                    print("Cambios descartados.")
+                                break
+                            break
 
                 case "4":
                     while True:
-                        data = retrieve_data(libro_path)
                         print("\nEliminar libro")
                         id_book = (
                             input(
                                 "Ingrese los Id de los libros a eliminar (separados por comas): "
                             )
-                            .replace(" ", "")
+                            .strip()
                             .split(",")
                         )
 
                         found_books = []
-                        try:
-                            for id in id_book:
-                                try:
-                                    for book in find_book("id", id.strip()):
-                                        found_books.append(book)
-                                except TypeError:
-                                    print(
-                                        f"Error: No se encontro un libro con el Id {id.strip()}."
-                                    )
-                                    continue
-                        except TypeError:
-                            print(
-                                "Error: Para eliminar varios libros, se deben ingresar los Id separados por comas."
-                            )
-                            continue
+                        # If find_book returns None, it means no user was found
+                        for id in id_book:
+                            try:
+                                for book in find_book("id", id.strip()):
+                                    found_books.append(book)
+                            except TypeError:
+                                print(
+                                    f"Error: No se encontro a algun libro con el Id {id.strip()}."
+                                )
+                                continue
 
                         print("\nVista previa de los libros a eliminar:")
                         for book in found_books:
                             print(book)
+                            print('-'*20)
 
                         while True:
                             print("\nConfirme la eliminacion de los libros:")
@@ -262,11 +252,10 @@ def gestion_libros():
 
                             if len(id_book) == 1:
                                 del_book(id_book[0], mode="single", sort=True)
-
                             else:
                                 del_book(id_book, mode="multi", sort=True)
 
-                            print(f"\nLibros eliminado exitosamente.")
+                            print(f"\nLibros eliminados exitosamente.")
                             break
                         break
 
