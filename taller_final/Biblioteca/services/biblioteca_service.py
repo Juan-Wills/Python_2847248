@@ -124,21 +124,20 @@ def json_data_path(file_name) -> str:
 
 
 # Data manipulation
-def retrieve_data(file_name, obj) -> dict:
+def retrieve_data(file_name, obj_name) -> dict:
     path= json_data_path(file_name)
-
+    
     try:
         with open(path, "r", encoding="utf-8") as file:
-            return convert_dict_to_object(json.load(file), globals()[obj.capitalize()])
+            return convert_dict_to_object(json.load(file), globals()[obj_name.capitalize()])
 
     except FileNotFoundError:
         print(f"Error: No se pudo encontrar el archivo en {path}. Asegurese de que el archivo exista.")
-        return None
-    
+    """
     except json.JSONDecodeError:
         if save(path, {"--header--": []}):  # Create an valid structure if it doesn't exist
-            return retrieve_data(file_name, obj)
-        return None
+            return retrieve_data(file_name, obj_name)
+    """
 
 def save(path, data: list) -> bool:
     try:
@@ -168,6 +167,8 @@ def autoincrement(obj_name, data_file_name, pos=-1) -> str | None:
         print(f"Error: los argumentos no son validos, verifique que el nombre del archivo {data_file_name} sea valido, y que el nombre del objeto este bien escrito.")
         return None
     
+    obj_name= obj_name + 's'  # Convert to plural form for the key
+
     try:
         result = int(data[obj_name][pos].id) + 1
     except KeyError:
@@ -185,7 +186,12 @@ def convert_dict_to_object(data: dict, obj_type) -> dict:
 
 
 def get_feat(object_name: str, index : str) -> str | bool:
-    index = int(index) -1
+    try:
+        index = int(index) -1
+    except ValueError:
+        print("Error: El valor ingresado no es un numero, por favor ingrese un numero que corresponda a las opciones del menu de navegacion.")
+        return False
+    
     object_name= object_name.lower()
 
     if object_name == 'usuario':
@@ -220,6 +226,8 @@ def get_feat(object_name: str, index : str) -> str | bool:
         ]
 
     try:
+        if test_mode:
+            return object_name
         return object_name[index]
     except (IndexError, ValueError):
         print(
@@ -229,10 +237,11 @@ def get_feat(object_name: str, index : str) -> str | bool:
 
 # --------------------------------------------------------------------------------------------------- #
 # Books data from json file
-data= retrieve_data('libros.json', 'libro')
 
 # CRUD books
 def add_book(libro: Libro) -> bool:
+    data= retrieve_data('libros.json', 'libro')
+
     if not data.get("libros", None):
         data = {"libros": []}
     data["libros"].append(libro)
@@ -248,6 +257,8 @@ def add_book(libro: Libro) -> bool:
 
 
 def find_book(filter_by: str, feature: str, all=False) -> list | bool:
+    data= retrieve_data('libros.json', 'libro')
+
     if all:
         return data["libros"]
 
@@ -263,6 +274,8 @@ def find_book(filter_by: str, feature: str, all=False) -> list | bool:
 
 
 def upd_book(book: Libro) -> bool:
+    data= retrieve_data('libros.json', 'libro')
+
     if isinstance(book, Libro):
         for i, b in enumerate(data["libros"]):
             if b.id == book.id:
@@ -279,46 +292,49 @@ def upd_book(book: Libro) -> bool:
             return False
 
 
-def del_book(identification: str | list, mode="single", sort=False) -> list | bool:
-    rmd_book = [] 
+def del_book(identification: str | list, sort=False) -> list | bool:
+    data= retrieve_data('libros.json', 'libro')
+    i = None
+    rmd_books = [] 
+    try:
 
-    if mode == "multi":
         for id in identification:
             for j, libro in enumerate(data["libros"]):
-                if libro.id == id:
+                if libro.id == id.strip():
                     if i is None:
                         i = j
-                    rmd_book.append(data["libros"].pop(j))
+                    rmd_books.append(data["libros"].pop(j))
+        if sort:
+            next_book= data["libros"][i]
+            next_book.id= int(autoincrement("libro", 'libros.json', pos= i)) - 2
+            data["libros"][i] = next_book
+            id= int(next_book.id)
 
-    if mode == "single":
-        for i, book in enumerate(data["libros"]):
-            if book.id == identification:
-                rmd_book = data["libros"].pop(i)
-                break
+            for book in data["libros"][i:]:
+                book.id = str(id + 1)
+                id = int(book.id)
+                i += 1
 
-    if sort:
-        for book in data["libros"][i:]:
-            book.id = autoincrement("libro", 'libros.json', pos= i - 1)
-            i += 1
-
-        data["libros"].sort(key=lambda x: x.id)
-
-    if rmd_book:
-        if test_mode:
-            return rmd_book
-        
-        if save(json_data_path('libros.json'), data):
-            return rmd_book
-        else:
-            print("Error: No se pudo eliminar libro en la base de datos")
-    return False
+        if rmd_books:
+            if test_mode:
+                return rmd_books
+            
+            if save(json_data_path('libros.json'), data):
+                return rmd_books
+            else:
+                print("Error: No se pudo eliminar libro en la base de datos")
+        return False
+    except IndexError:
+        print("Error: No se pudo eliminar el libro, verifique que el id sea correcto.")
+        return False
 
 # Users data from json fil
-data= retrieve_data('libros.json', 'libro')
-
+    
 # CRUD users
 def add_user(user: Usuario) -> bool:
-    if not data.get("usuarios"):
+    data= retrieve_data('usuarios.json', 'usuario')
+
+    if not data.get("usuarios", None):
         data = {"usuarios": []}
     data["usuarios"].append(user)
 
@@ -334,6 +350,8 @@ def add_user(user: Usuario) -> bool:
 
 
 def find_user(filter_by: str, feature: str, all=False) -> list | bool:
+    data= retrieve_data('usuarios.json', 'usuario')
+
     if all:
         return data["usuarios"]
     
@@ -347,6 +365,8 @@ def find_user(filter_by: str, feature: str, all=False) -> list | bool:
     return filtered_data
 
 def upd_user(user: Usuario) -> bool:
+    data= retrieve_data('usuarios.json', 'usuario')
+
     if isinstance(user, Usuario):
         for i, u in enumerate(data["usuarios"]):
             if u.id == user.id:
@@ -363,32 +383,30 @@ def upd_user(user: Usuario) -> bool:
                 return False
 
 
-def del_user(identification: str | list, mode="single", sort=False) -> list | bool:
+def del_user(identification: str | list, sort=False) -> list | bool:
+    data= retrieve_data('usuarios.json', 'usuario')
+    i = None
     rmd_user = [] 
-    
-    if mode == "multi":
-        for id in identification:
-            for j, usuario in enumerate(data["usuarios"]):
-                if usuario.id == id:
-                    if i is None:
-                        i = j
-                    rmd_user.append(data["usuarios"].pop(j))
 
-    if mode == "single":
-        for i, book in enumerate(data["usuarios"]):
-            if book.id == identification:
-                rmd_user = data["usuarios"].pop(i)
-                break
+    for id in identification:
+        for j, usuario in enumerate(data["usuarios"]):
+            if usuario.id == id.strip():
+                if i is None:
+                    i = j
+                rmd_user.append(data["usuarios"].pop(j))
 
     if sort:
-        for book in data["usuarios"][i:]:
-            book.id = autoincrement("usuario", 'usuarios.json', pos= i - 1)
+        next_user = data["usuarios"][i]
+        next_user.id = int(autoincrement("usuario", 'usuarios.json', pos= i)) - 2
+        data["usuarios"][i] = next_user
+        id = int(next_user.id)
+
+        for user in data["usuarios"][i:]:
+            user.id = str(id + 1)
+            id = int(user.id)
             i += 1
 
-        data["usuarios"].sort(key=lambda x: x.id)
-
     if rmd_user:
-
         if test_mode:
             return rmd_user
 
@@ -396,13 +414,15 @@ def del_user(identification: str | list, mode="single", sort=False) -> list | bo
             return rmd_user
         else:
             print("Error: No se pudo eliminar al usuario la base de datos")
-    return False
-
-# Loans data from json file
-data= retrieve_data('prestamos.json', 'prestamo')
-
+            return False
+    
 # CRUD loans
 def add_loan(loan: Prestamo):
+    data= retrieve_data('prestamos.json', 'prestamo')
+
+    if not data.get("prestamos", None):
+        data = {"prestamos": []}
+
     data["prestamos"].append(loan)
 
     if test_mode:
@@ -415,6 +435,8 @@ def add_loan(loan: Prestamo):
 
 
 def find_loan(filter_by: str, feature: str, all=False):
+    data= retrieve_data('prestamos.json', 'prestamo')
+
     if all:
         return data["prestamos"]
     
@@ -428,6 +450,8 @@ def find_loan(filter_by: str, feature: str, all=False):
 
 
 def upd_loan_devolution(loan: Prestamo):
+    data= retrieve_data('prestamos.json', 'prestamo')
+
     if isinstance(loan, Prestamo):
         for i, l in enumerate(data["prestamos"]):
             if l.id == loan.id:
@@ -446,6 +470,8 @@ def upd_loan_devolution(loan: Prestamo):
 
 # Search and update fines
 def find_fine(filter_by: str, feature: str, all= False):
+    data= retrieve_data('prestamos.json', 'prestamo')
+
     if all:
         return data["prestamos"]
     
@@ -466,6 +492,8 @@ def find_fine(filter_by: str, feature: str, all= False):
 
 
 def pay_fine(loan: Prestamo, to_pay: int) -> bool:
+    data= retrieve_data('prestamos.json', 'prestamo')
+
     for i, loan in enumerate(data["prestamos"]):
 
         if loan.id == loan.id:
@@ -482,8 +510,6 @@ def pay_fine(loan: Prestamo, to_pay: int) -> bool:
                 return False
 
         data["prestamos"][i] = loan
-
-        return True
                 
         if test_mode:
             return True

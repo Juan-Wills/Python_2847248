@@ -12,12 +12,11 @@ from models.usuario import Usuario
 from tests.test_views import test_mode
 
 def gestion_usuarios():
-    """
     if test_mode:
-        print("\nModo de prueba activado, se usaran datos por defecto.")
-
-        # Testing adding user
-        nuevo_usuario = Usuario(
+        print("\nModo de prueba activado, no se guardaran los cambios realizados")
+        # Add user
+        print("\nAgregar usuario...")
+        new_user = Usuario(
                         id= '1',
                         nombre="Juan",
                         apellido="Wills",
@@ -26,15 +25,88 @@ def gestion_usuarios():
                         telefono="3225615099",
                         afiliacion=True,
                     )
-        add_user(nuevo_usuario)
+        if add_user(new_user):
+            print(f"\nNuevo usuario agregado exitosamente.\n{new_user}")
+        else:
+            print("Error al agregar el usuario.")
 
-        # Testing finding user
-        users = find_user("correo", 'juan@gmail.com')
-        print(f"\nUsuarios encontrados: {next(users)}")
+        while True:
+            # Find user
+            print("\nBuscar usuario...")
+            all_mode= input("Ver todos los registros? (si/no): ").strip().lower()
+            if all_mode == 'si':
+                all_mode = True
+                filter_by = ''
+                feature = ''
+            else:
+                all_mode = False
+                categories= get_feat("usuario", 0)
+                print("\nCategorias disponibles:")
+                print(categories)
+                while True:
+                    filter_by = input("Ingrese la categoria para filtrar: ").strip()
+                    if filter_by in categories:
+                        break
+                    print(f"Categoria '{filter_by}' no valida. Por favor, elija una de las siguientes: {categories}")
+                feature = input("Ingrese el atributo a filtrar: ").strip()
+                print()
 
-        user= find_user()
-    """
+            if users := find_user(filter_by, feature, all= all_mode):
+                for user in users:
+                    print(user)
+                    print('-'*50)
+            else:
+                print("No se encontraron usuarios registrados.")
 
+            # Update user
+            print("Actualizar usuario...")
+            try:
+                if users := find_user(filter_by, feature):
+                    if len(users) > 1:
+                        print(f"Error, se encontro mas de un usuario con la busqueda proporcionada. Coincidencias: {len(users)}")
+                    else:
+                        user = users[0]
+                        print(f"\nUsuario encontrado para actualizar:\n{user}")
+                        new_value = input(f"\nIngrese el nuevo valor para '{filter_by}': ").title().strip()
+                        setattr(user, filter_by, new_value)
+                        if user:= upd_user(user):
+                            print(f"\nUsuario actualizado exitosamente: {user}")
+                        else:
+                            print("\nError al actualizar el usuario.")
+                else:
+                    print("\nNo se encontraron libros.")
+                    print("(Asegurese de no filtrar por todos los registros)")
+
+            except AttributeError:
+                print("No se puede realizar esta accion con el filtro proporcionado.")
+                print("(Asegurese de no filtrar por todos los registros)")
+                
+            # Delete user
+            print("\nEliminar usuario...")
+            try:
+                if users := find_user(filter_by, feature):
+                    user_ids = [user.id for user in users]
+                    if del_users:= del_user(user_ids, sort=True):
+                        print(f"\nUsuario/s eliminado exitosamente.")
+                        print("Usuario eliminado:") 
+                        for user in del_users:
+                            print(user)
+                    else:
+                        print("\nError al eliminar el usuario.")
+                else:
+                    print("No se encontraron usuarios.")
+                    print("(Asegurese de no filtrar por todos los registros)")
+
+            except AttributeError:
+                print("No se puede realizar esta accion con el filtro proporcionado.")
+                print("(Asegurese de no filtrar por todos los registros)")
+
+
+            # End test mode
+            if input("\nTerminar test? (si/no): ").strip().lower() == 'si':
+                print("\nModo de prueba finalizado.")
+                return
+#---------------------------------------------------------------
     while True:
         try:
             print(
@@ -60,11 +132,11 @@ def gestion_usuarios():
                         print("\nAgregar nuevo usuario")
                         print("Ingrese los datos del usuario:")
                         while True:
-                            nombre = input("Nombre\s: ").title().strip()
+                            nombre = input("Nombre/s: ").title().strip()
                             if validate_input_format(nombre):
                                 break
                         while True:
-                            apellido = input("Apellido\s: ").title().strip()
+                            apellido = input("Apellido/s: ").title().strip()
                             if validate_input_format(apellido):
                                 break
                         while True:
@@ -99,7 +171,7 @@ def gestion_usuarios():
                             )
                             break
 
-                        nuevo_usuario = Usuario(
+                        new_user = Usuario(
                             autoincrement("usuario", 'usuarios.json'),
                             nombre,
                             apellido,
@@ -108,7 +180,7 @@ def gestion_usuarios():
                             telefono,
                             afiliacion,
                         )
-                        print(f"\nVista previa:\n{nuevo_usuario}")
+                        print(f"\nVista previa:\n{new_user}")
 
                         while True:
                             print("Desea guardar el usuario?")
@@ -121,8 +193,8 @@ def gestion_usuarios():
                             if option == "2":
                                 print("Operacion cancelada")
                                 return
-                            add_user(nuevo_usuario)
-                            print(f"\nUsuario '{nuevo_usuario.nombre}' agregado exitosamente.")
+                            add_user(new_user)
+                            print(f"\nUsuario '{new_user.nombre}' agregado exitosamente.")
                             break
                         break
 
@@ -237,7 +309,7 @@ def gestion_usuarios():
                                     return
 
                                 if upd_user(user):
-                                    print(f"\Usuario actualizado exitosamente.")
+                                    print(f"\nUsuario actualizado exitosamente.")
                                 else:
                                     print(f"Se ha presentado un error al intentar guardar el usuario. Por favor intentelo de nuevo")
                                 break
@@ -265,7 +337,7 @@ def gestion_usuarios():
                                 print(
                                     f"Error: No se encontro a algun usuario con el Id {id.strip()}."
                                 )
-                                continue
+                                return
 
                         print("\nVista previa de los usuarios a eliminar:")
                         for user in found_users:
@@ -286,12 +358,12 @@ def gestion_usuarios():
                                 print("Abortando eliminacion de usuarios...")
                                 break
 
-                            if len(id_user) == 1:
-                                del_user(id_user[0], mode="single", sort=True)
+                            if del_user(id_user, mode="single", sort=True):
+                                print(f"\nUsuario eliminado exitosamente.")
+                                for user in found_users:
+                                    print(user)
                             else:
-                                del_user(id_user, mode="multi", sort=True)
-
-                            print(f"\nUsuarios eliminados exitosamente.")
+                                print(f"\nError al eliminar los usuarios.")
                             break
                         break
 

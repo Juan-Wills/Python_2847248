@@ -12,9 +12,25 @@
       "id": "2",
       "titulo": "El Coronel No Tiene Quien Le Escriba",
       "genero": "Realismo magico",
-      "autor": "Grabriel Garcia Marquez",
+      "autor": "Gabriel Garcia Marquez",
       "editorial": "Para Todos",
       "fecha_publicacion": "20/12/1957"
+    },
+    {
+      "id": "3",
+      "titulo": "Cien Años de Soledad",
+      "genero": "Realismo magico",
+      "autor": "Gabriel Garcia Marquez",
+      "editorial": "Para Todos",
+      "fecha_publicacion": "20/12/1967"
+    },
+    {
+      "id": "4",
+      "titulo": "El Aleph",
+      "genero": "Ficcion",
+      "autor": "Jorge Luis Borges",
+      "editorial": "Editorial Sur",
+      "fecha_publicacion": "01/01/1945"
     }
   ]
 }

@@ -18,7 +18,7 @@ class Libro:
 
     def __str__(self):
         return (
-                "Detalles del Libro:\n"
+                "Detalles del Libro\n"
                 f"Id: {self.id}\n"
                 f"Titulo: {self.titulo}\n"
                 f"Genero: {self.genero}\n"

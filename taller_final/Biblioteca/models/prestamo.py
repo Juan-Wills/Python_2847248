@@ -34,7 +34,7 @@ class Prestamo:
         return self.multa
 
     def __str__(self):
-        return (f"Detalles de Prestamo:\n"
+        return (f"Detalles de Prestamo\n"
                 f"  Libro: {self.libro.titulo}\n"
                 f"  Usuario: {self.usuario.nombre}\n"
                 f"  Fecha del Prestamo: {self.fecha_prestamo.strftime('%Y/%m/%d')}\n"

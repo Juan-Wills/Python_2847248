@@ -13,21 +13,103 @@ from tests.test_views import test_mode
 
 
 def gestion_libros():
-    """
     if test_mode:
-        print("Modo de prueba activado. No se guardaran cambios en los libros.")
+        print("\nModo de prueba activado. No se guardaran los cambios realizados.")
+        # Add book
+        print("\nAgregar libro...")
         new_libro = Libro( 
                         titulo="El Principito",
                         genero="Ficcion",
                         autor="Antoine de Saint-Exupery",
                         editorial="Reynal & Hitchcock",
                         fecha_publicacion="1943",
-                        id=autoincrement(),
+                        id=autoincrement('libro', 'libros.json'),
                     )
 
-        add_book(new_libro)
-        return
-    """
+        if add_book(new_libro):
+            print(f"\nNuevo libro agregado exitosamente.\n\n{new_libro}")
+        else:
+            print("Error al agregar el libro.")
+
+        while  True:
+            # Find book
+            print("\nBuscar libro...")
+            all_mode= input("Ver todos los registros? (si/no): ").strip().lower()
+            if all_mode == 'si':
+                all_mode = True
+                filter_by = ''
+                feature = ''
+            else:
+                all_mode = False
+                categories= get_feat("libro", 0)
+                print("\nCategorias disponibles:")
+                print(categories)
+                while True:
+                    filter_by = input("Ingrese la categoria para filtrar: ").strip()
+                    if filter_by in categories:
+                        break
+                    print(f"Categoria '{filter_by}' no valida. Por favor, elija una de las siguientes: {categories}")
+                feature = input("Ingrese el atributo a filtrar: ").strip()
+                print()
+
+            if books := find_book(filter_by, feature, all= all_mode):
+                for book in books:
+                    print(book)
+                    print('-'*50)
+            else:
+                print("No se encontraron libros registrados.")
+
+            # Update book
+            print("\nActualizar libro...")
+            try:
+                if filter_by == 'id':
+                    print("No se puede actualizar el Id de un libro.")
+                else:
+                    if books := find_book(filter_by, feature):
+                        if len(books) > 1:
+                            print(f"Error, se encontro mas de un libro con la busqueda proporcionada. Coincidencias: {len(books)}")
+                        else:
+                            book = books[0]
+                            print(f"\nLibro encontrado para actualizar:\n{book}")
+                            new_value = input(f"\nIngrese el nuevo valor para '{filter_by}': ").title().strip()
+                            setattr(book, filter_by, new_value)
+                            if book:= upd_book(book):
+                                print(f"\nLibro actualizado exitosamente: {book}")
+                            else:
+                                print("\nError al actualizar el libro.")
+                    else:
+                        print("\nNo se encontraron libros.")
+                        print("(Asegurese de no filtrar por todos los registros)")
+
+            except AttributeError:
+                    print("No se puede realizar esta accion con el filtro proporcionado.")
+                    print("(Asegurese de no filtrar por todos los registros)")
+
+            # Delete book
+            print("\nEliminar libro...")
+            try:
+                if books := find_book(filter_by, feature):
+                    book_ids = [book.id for book in books]
+                    if del_books:= del_book(book_ids, sort=True):
+                        print(f"\nLibro/s eliminado exitosamente.")
+                        print("Libro eliminado:") 
+                        for book in del_books:
+                            print(book)
+                    else:
+                        print("\nError al eliminar el libro.")
+                else:
+                    print("No se encontraron libros.")
+                    print("(Asegurese de no filtrar por todos los registros)")
+
+            except AttributeError:
+                print("No se puede realizar esta accion con el filtro proporcionado.")
+                print("(Asegurese de no filtrar por todos los registros)")
+
+            # End test mode
+            if input("\nTerminar test? (si/no): ").strip().lower() == 'si':
+                print("\nModo de prueba finalizado.")
+                return
+#---------------------------------------------------------------
     while True:
         try:
             print((
@@ -37,7 +119,8 @@ def gestion_libros():
                     "    3. Actualizar libro\n"
                     "    4. Eliminar libro\n\n"
                     "    0. Volver\n"
-            ))
+                )
+            )
 
             option = input("Ingresar opcion: ")
 
@@ -223,7 +306,7 @@ def gestion_libros():
                         )
 
                         found_books = []
-                        # If find_book returns None, it means no user was found
+                        # If find_book returns None, it means no book was found
                         for id in id_book:
                             try:
                                 for book in find_book("id", id.strip()):
@@ -232,7 +315,7 @@ def gestion_libros():
                                 print(
                                     f"Error: No se encontro a algun libro con el Id {id.strip()}."
                                 )
-                                continue
+                                return
 
                         print("\nVista previa de los libros a eliminar:")
                         for book in found_books:
@@ -243,6 +326,7 @@ def gestion_libros():
                             print("\nConfirme la eliminacion de los libros:")
                             print("1. Si\t2. No")
                             option = input("Ingresar opcion: ")
+                            print()
 
                             if not validate_menu_options(
                                 option, mode="equal", min_args=1, max_args=2,
@@ -253,12 +337,12 @@ def gestion_libros():
                                 print("Abortando eliminacion de libros...")
                                 break
 
-                            if len(id_book) == 1:
-                                del_book(id_book[0], mode="single", sort=True)
+                            if del_book(id_book, sort=True):
+                                print(f"\nLibro/s eliminado exitosamente:")
+                                for book in found_books:
+                                    print(book)
                             else:
-                                del_book(id_book, mode="multi", sort=True)
-
-                            print(f"\nLibros eliminados exitosamente.")
+                                print("\nError al eliminar los libros.")
                             break
                         break
 

@@ -11,7 +11,7 @@ class Usuario:
 
     def __str__(self):
         return (
-                "Detalles del Usuario:\n"
+                "Detalles del Usuario\n"
                 f"ID: {self.id}\n"
                 f"Nombre: {self.nombre}\n"
                 f"Apellido: {self.apellido}\n"

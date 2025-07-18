@@ -16,11 +16,82 @@ from models.prestamo import Prestamo
 from tests.test_views import test_mode
 
 def gestion_prestamos():
-    """
     if test_mode:
-        print("Modo de prueba activado. No se guardaran cambios en los prestamos.")
-        return
-    """
+        print("\nModo de prueba activado, no se guardaran los cambios realizados")
+        # Add loan
+        print("\nAgregar prestamo...")
+        new_prestamo = Prestamo(
+                        id= '1',
+                        libro= 'Cien años de soledad',
+                        usuario= 'Gabriel Garcia',
+                        fecha_prestamo= datetime.strptime('2023-10-01', '%Y-%m-%d').date(),
+                        fecha_devolucion= datetime.strptime('2023-10-15', '%Y-%m-%d').date()
+                    )
+        if add_loan(new_prestamo):
+            print(f"\nNuevo prestamo agregado exitosamente:\n{new_prestamo}")
+        else:
+            print("Error al agregar el prestamo.")
+
+        while True:
+            # Find loans
+            print("\nBuscar prestamos...")
+            all_mode= input("Ver todos los registros? (si/no): ").strip().lower()
+            if all_mode == 'si':
+                all_mode = True
+                filter_by = ''
+                feature = ''
+            else:
+                all_mode = False
+                categories= get_feat("prestamo", 0)
+                print("\nCategorias disponibles:")
+                print(categories)
+                while True:
+                    filter_by = input("Ingrese la categoria para filtrar: ").strip()
+                    if filter_by in categories:
+                        break
+                    print(f"Categoria '{filter_by}' no valida. Por favor, elija una de las siguientes: {categories}")
+                feature = input("Ingrese el atributo a filtrar: ").strip()
+                print()
+
+            if loans := find_loan(filter_by, feature, all= all_mode):
+                for loan in loans:
+                    print(loan)
+                    print('-'*50)
+            else:
+                print("No se encontraron prestamos registrados.")
+
+            # Update loan
+            print("\nActualizar devolucion de prestamo...")
+            try:
+                if loans:= find_loan(filter_by, feature):
+                    if len(loans) > 1:
+                        print(f"Error, se encontro mas de un registro de prestamo con la busqueda proporcionada. Coincidencias: {len(loans)}")
+                    else:
+                        loan = loans[0]
+                        print(f"\nPrestamo encontrado para actualizar:\n{loan}")
+                        devolcion = input("\nIngrese la fecha de devolucion (opcional): ").title().strip()
+                        if not devolcion:
+                            devolcion = datetime.date.today()
+
+                        setattr(loan, filter_by, devolcion)
+                        if upd_loan_devolution(loan):
+                            print(f"\nPrestamo actualizado exitosamente:\n{loan}")
+                        else:
+                            print("\nError al actualizar el prestamo.")
+                else:
+                    print("\nNo se encontraron prestamos.")
+                    print("(Asegurese de no filtrar por todos los registros)")
+
+            except AttributeError:
+                print("No se puede realizar esta accion con el filtro proporcionado.")
+                print("(Asegurese de no filtrar por todos los registros)")
+            
+
+            # End test mode
+            if input("\nTerminar test? (si/no): ").strip().lower() == 'si':
+                print("\nModo de prueba finalizado.")
+                return
+#---------------------------------------------------------------
     while True:
         try:
             print(
@@ -49,7 +120,7 @@ def gestion_prestamos():
                             continue
 
                         if book := find_book("id", book_id):
-                            print(f"\Vista previa:\n{book}\n")
+                            print(f"\nVista previa:\n{book}\n")
                             print("Es este el libro esperado?")
                             print("1. Confirmar    2. Rechazar")
                             option = input("Ingresar opcion: ")
@@ -76,7 +147,7 @@ def gestion_prestamos():
                             continue
 
                         if user := find_user("correo", user_mail):
-                            print(f"\Vista previa:\n{user}\n")
+                            print(f"\nVista previa:\n{user}\n")
                             print("Es este el usuario esperado?")
                             print("1. Confirmar    2. Rechazar")
                             option = input("Ingresar opcion: ")
@@ -224,6 +295,66 @@ def gestion_prestamos():
 
 
 def gestion_multas():
+    if test_mode:
+        print("Modo de prueba activado. No se guardaran los cambios realizados")
+        # Check fines logs 
+        while True:
+           # Find user
+            print("Buscar prestamo...")
+            all= input("Ver todos los registros? (si/no): ").strip().lower()
+            if all == 'si':
+                all = True
+                filter_by = ''
+                feature = ''
+            else:
+                all = False
+                categories= get_feat("prestamo", 0)
+                print("\nCategorias disponibles:")
+                print(categories)
+                while True:
+                    filter_by = input("Ingrese la categoria para filtrar: ").strip()
+                    if filter_by in categories:
+                        break
+                    print(f"Categoria '{filter_by}' no valida. Por favor, elija una de las siguientes: {categories}")
+                feature = input("Ingrese el atributo a filtrar: ").strip()
+                print()
+
+            if prestamo := find_user(filter_by, feature, all= all):
+                for fine in prestamo:
+                    print(fine)
+                    print('-'*50)
+            else:
+                print("No se encontraron multas registradas.")
+        
+            # Pay fine
+            print("\nPagar multa pendiente...")
+            try:
+                if filter_by == 'id':
+                    print("No se puede actualizar el Id de un libro.")
+                else:
+                    if loan:= find_book(filter_by, feature):
+                        loan= loan[0]
+                        print(f"Multa acumulada: ${loan.multa}")
+                        to_pay= input("Ingrese el valor a pagar: ").strip()
+
+                        if loan.pagar_multa(to_pay):
+                            print(f"Multa pagada.")
+                            print(f"Deuda actual: {loan.multa}")
+                        else:
+                            print(f"La multa no se pudo pagar por valor de pago insuficiente")
+                    else:
+                        print("No se encontraron prestamos con la caracteristica proporcionada.")
+                        print("(Asegurese de no filtrar por todos los registros)")
+
+            except AttributeError:
+                    print("No se puede realizar esta accion con el filtro proporcionado.")
+                    print("(Asegurese de no filtrar por todos los registros)")
+
+            # End test mode
+            if input("Terminar test? (si/no): ").strip().lower() == 'si':
+                print("\nModo de prueba finalizado.")
+                return
+#---------------------------------------------------------------
     while True:
         try:
             print(
