@@ -1,7 +1,8 @@
 import sys
 from views.view_libros import gestion_libros
 from views.view_usuarios import gestion_usuarios
-from views.view_prestamos import gestion_prestamos, gestion_multas
+from views.view_prestamos import gestion_prestamos
+from views.view_multas import gestion_multas
 
 def main():
     try:
@@ -24,7 +25,7 @@ def main():
                 case '2':
                     gestion_usuarios()
                 case '3':
-                    gestion_prestamos
+                    gestion_prestamos()
                 case '4':
                     gestion_multas()
                 case _:

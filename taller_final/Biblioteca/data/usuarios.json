@@ -1,6 +1,7 @@
 {
   "usuarios": [
     {
+      "id": "1",
       "nombre": "Juan",
       "apellido": "Wills",
       "correo": "juan@gmail.com",
@@ -9,6 +10,7 @@
       "afiliacion": true
     },
     {
+      "id": "2",
       "nombre": "Jesus Santiago",
       "apellido": "Wills Jacome",
       "correo": "santi@gmail.com",
@@ -17,6 +19,7 @@
       "afiliacion": true
     },
     {
+      "id": "3",
       "nombre": "Sol Jaqueline",
       "apellido": "Jacome Trujillo",
       "correo": "sol@gmail.com",

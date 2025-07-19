@@ -1,0 +1,1 @@
+test_mode = True  # Enable to prevent saving changes to the json files

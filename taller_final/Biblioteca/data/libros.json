@@ -6,7 +6,8 @@
       "genero": "Novela",
       "autor": "Carlitos",
       "editorial": "Casa Pajaro",
-      "fecha_publicacion": "10/10/1997"
+      "fecha_publicacion": "10/10/1997",
+      "disponible": false
     },
     {
       "id": "2",
@@ -14,15 +15,17 @@
       "genero": "Realismo magico",
       "autor": "Gabriel Garcia Marquez",
       "editorial": "Para Todos",
-      "fecha_publicacion": "20/12/1957"
+      "fecha_publicacion": "20/12/1957",
+      "disponible": false
     },
     {
       "id": "3",
-      "titulo": "Cien Años de Soledad",
+      "titulo": "Cien A\u00f1os de Soledad",
       "genero": "Realismo magico",
       "autor": "Gabriel Garcia Marquez",
       "editorial": "Para Todos",
-      "fecha_publicacion": "20/12/1967"
+      "fecha_publicacion": "20/12/1967",
+      "disponible": false
     },
     {
       "id": "4",
@@ -30,7 +33,8 @@
       "genero": "Ficcion",
       "autor": "Jorge Luis Borges",
       "editorial": "Editorial Sur",
-      "fecha_publicacion": "01/01/1945"
+      "fecha_publicacion": "01/01/1945",
+      "disponible": true
     }
   ]
 }

@@ -7,6 +7,7 @@ class Libro:
         editorial: str,
         fecha_publicacion: str,
         id: str,
+        disponible: bool = True,
     ):
         self.id= id
         self.titulo = titulo
@@ -14,6 +15,7 @@ class Libro:
         self.autor = autor
         self.editorial = editorial
         self.fecha_publicacion = fecha_publicacion
+        self.disponible = disponible
         
 
     def __str__(self):
@@ -24,7 +26,8 @@ class Libro:
                 f"Genero: {self.genero}\n"
                 f"Autor: {self.autor}\n"
                 f"Fecha de Publicacion: {self.fecha_publicacion}\n"
-                f"Editorial: {self.editorial}"
+                f"Editorial: {self.editorial}\n"
+                f"Disponibilidad: {"Disponible" if self.disponible else "Prestado"}"
         )
 
     def to_dict(self):

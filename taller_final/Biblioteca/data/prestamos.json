@@ -1,0 +1,44 @@
+{
+  "prestamos": [
+    {
+      "id": "1",
+      "libro": "La sombra del viento",
+      "usuario": "juan@gmail.com",
+      "fecha_prestamo": "18/07/2025",
+      "fecha_devolucion": "18/07/2025",
+      "multa": 0
+    },
+    {
+      "id": "2",
+      "libro": "El Coronel No Tiene Quien Le Escriba",
+      "usuario": "santi@gmail.com",
+      "fecha_prestamo": "18/07/2025",
+      "fecha_devolucion": "18/08/2025",
+      "multa": 0
+    },
+    {
+      "id": "3",
+      "libro": "Cien A\u00f1os de Soledad",
+      "usuario": "juan@gmail.com",
+      "fecha_prestamo": "18/07/2025",
+      "fecha_devolucion": "18/07/2025",
+      "multa": 0
+    },
+    {
+      "id": "4",
+      "libro": "La sombra del viento",
+      "usuario": "juan@gmail.com",
+      "fecha_prestamo": "18/07/2025",
+      "fecha_devolucion": "20/07/2025",
+      "multa": 0
+    },
+    {
+      "id": "5",
+      "libro": "Cien A\u00f1os de Soledad",
+      "usuario": "juan@gmail.com",
+      "fecha_prestamo": "18/07/2025",
+      "fecha_devolucion": "20/07/2025",
+      "multa": 0
+    }
+  ]
+}
