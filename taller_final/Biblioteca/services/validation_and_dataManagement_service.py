@@ -126,10 +126,17 @@ def validate_menu_options(
 def json_data_path(file_name) -> str:
     if not re.search(r"[.json]$", file_name):
         file_name += ".json"
+        print(file_name)
 
-    path = str(Path.cwd().joinpath(f"Biblioteca/data/{file_name}"))
-    if "taller_final" not in str(Path.cwd()):
-        path = "taller_final/" + path
+    start_dir = Path.home() / 'Documents' # Assuming the data folder is in the Documents directory
+    try:
+        path = list(Path.rglob(start_dir, f"Python_2847248/taller_final/Biblioteca/data/{file_name}"))[0]
+    except IndexError:
+        print(f"Error: No se pudo encontrar el archivo {file_name}.")
+        print("Asegurese que el projecto este en la carpeta 'Documents'.")
+        return None
+    path= path.resolve()
+  
     try:
         # Just to check if the file exists
         with open(path, "r", encoding="utf-8"):
@@ -141,27 +148,28 @@ def json_data_path(file_name) -> str:
 
 # Data manipulation
 def retrieve_data(file_name, obj_name) -> dict:
-    path = json_data_path(file_name)
+    if path:= json_data_path(file_name):
+        try:
+            with open(path, "r", encoding="utf-8") as file:
+                return convert_dict_to_obj(
+                    json.load(file), globals()[obj_name.capitalize()]
+                )
 
-    try:
-        with open(path, "r", encoding="utf-8") as file:
-            return convert_dict_to_obj(
-                json.load(file), globals()[obj_name.capitalize()]
+        except FileNotFoundError:
+            print(
+                f"Error: No se pudo encontrar el archivo en {path}. Asegurese de que el archivo exista."
             )
 
-    except FileNotFoundError:
-        print(
-            f"Error: No se pudo encontrar el archivo en {path}. Asegurese de que el archivo exista."
-        )
-
-    except json.JSONDecodeError:
-        save(
-            path, {obj_name + "s": []}
-        )  # Create an valid structure if it doesn't exist
+        except json.JSONDecodeError:
+            save(
+                path, {obj_name + "s": []}
+            )  # Create an valid structure if it doesn't exist
+            return None
+    else:
+        print(f"Error: No se pudo encontrar el archivo {file_name}. Asegurese de que el archivo exista.")
         return None
 
-
-def save(path, data: list) -> bool:
+def save(path, data: dict) -> bool:
     try:
         header = list(data.keys())[0]
         with open(path, "w", encoding="utf-8") as file:
@@ -197,11 +205,12 @@ def autoincrement(obj_name, data_file_name, pos=-1) -> str | None:
             f"Error: los argumentos no son validos, verifique que el nombre del archivo {data_file_name} sea valido, y que el nombre del objeto este bien escrito."
         )
         return None
-
-    obj_name = obj_name + "s"  # Convert to plural form for the key
+    
+    if obj_name[-1] != "s":
+        obj_name = obj_name + "s"  # Convert to plural form for the key
 
     try:
-        result = int(data[obj_name][-1].id) + 1
+        result = int(data[obj_name][pos].id) + 1
     except KeyError:
         result = "1"
 
@@ -247,7 +256,7 @@ def get_feat(object_name: str, index: str, all= False) -> str | bool:
             "nombre",
             "apellido",
             "correo",
-            "residencia",
+            "residencia",   
             "telefono",
             "afiliacion",
             "id",

@@ -39,8 +39,14 @@ def gestion_libros():
             match option:
                 case "0":
                     return
-
                 case "2":
+                    print("\nBuscando en base de datos...")
+                    if not find_book("", "", all=True):
+                        print(
+                            "No hay libros registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
                     while True:
                         print("\nFiltrar libros")
                         print("Elegir categoria: ")
@@ -50,21 +56,23 @@ def gestion_libros():
                         option = input("Ingresar opcion: ")
 
                         if option == "7":
+                            print("\nBuscando libros...")
                             for book in find_book("", "", all=True):
                                 print(book)
                                 print("-" * 20)
                             break
 
-                        attribute = get_feat("prestamo", option)
 
                         if not validate_menu_options(
                             option,
                             type="category",
                             max_args=7,
-                            object_name="prestamo",
+                            object_name="libro",
                         ):
                             continue
-
+                        
+                        print("\nBuscando libros...")
+                        attribute = get_feat("libro", option)
                         filter = input("Buscar: ").title().strip()
 
                         if books := find_book(attribute, filter):
@@ -110,7 +118,7 @@ def gestion_libros():
 
                     while True:
                         print(f"\nVista previa:\n{new_libro}")
-                        print("Desea guardar el libro?")
+                        print("\nDesea guardar el libro?")
                         print("1. Si    2. No (Volver)")
                         option = input("Ingresar opcion: ")
 
@@ -123,12 +131,20 @@ def gestion_libros():
                             print("Abortando operacion...")
                             break
 
-                        add_book(new_libro)
-                        print(f"\nLibro '{new_libro.titulo}' guardado exitosamente.")
+                        print("\nAgregando libro...")
+                        if add_book(new_libro):
+                            print(f"\nLibro guardado exitosamente.")
                         break
                     break
 
                 case "3":
+                    print("\nBuscando en base de datos...")
+                    if not find_book("", "", all=True):
+                        print(
+                            "No hay libros registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
                     while True:
                         print("\nActualizar libro")
                         print("Categorias de busqueda")
@@ -142,6 +158,7 @@ def gestion_libros():
 
                         busqueda = input("Buscar: ")
 
+                        print("\nBuscando libro...\n")
                         book = find_book(get_feat("libro", menu_option), busqueda)
 
                         if not book:
@@ -156,12 +173,12 @@ def gestion_libros():
                             )
                             continue
 
-                        book = next(book)
-                        print("Informacion original")
+                        book = book[0]
+                        print("\nInformacion original")
                         print(book)
 
                         while True:
-                            print("Que informacion desea modificar:")
+                            print("\nQue informacion desea modificar:")
                             print(
                                 "1. Titulo\t2. Autor\t3. Genero\t4. Editorial\t5. Fecha de Publicacion"
                             )
@@ -197,7 +214,7 @@ def gestion_libros():
                                     continue
 
                                 if save == "1":
-
+                                    print("\nActualizando libro...")
                                     if upd_book(book):
                                         print(f"\nLibro actualizado exitosamente.")
                                     else:
@@ -211,6 +228,13 @@ def gestion_libros():
                             break
 
                 case "4":
+                    print("\nBuscando en base de datos...")
+                    if not find_book("", "", all=True):
+                        print(
+                            "No hay libros registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
                     while True:
                         print("\nEliminar libro")
                         id_book = (
@@ -223,6 +247,7 @@ def gestion_libros():
 
                         found_books = []
                         # If find_book returns None, it means no book was found
+                        print("\nBuscando libros...")
                         for id in id_book:
                             try:
                                 for book in find_book("id", id.strip()):
@@ -230,13 +255,14 @@ def gestion_libros():
                             except TypeError:
                                 print(
                                     f"Error: No se encontro a algun libro con el Id {id.strip()}."
+                                    f"Rango de IDs disponibles: 1 - {autoincrement('libro', 'libros.json') - 1}"
                                 )
                                 return
 
                         print("\nVista previa de los libros a eliminar:")
                         for book in found_books:
                             print(book)
-                            print("-" * 20)
+                            print("-" * 50)
 
                         while True:
                             print("\nConfirme la eliminacion de los libros:")
@@ -256,10 +282,12 @@ def gestion_libros():
                                 print("Abortando eliminacion de libros...")
                                 break
 
+                            print("\nEliminando libro...")
                             if del_book(id_book, sort=True):
                                 print(f"\nLibro/s eliminado exitosamente:")
                                 for book in found_books:
                                     print(book)
+                                    print("-" * 50)
                             else:
                                 print("\nError al eliminar los libros.")
                             break

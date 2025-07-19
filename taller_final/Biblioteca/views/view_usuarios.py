@@ -28,7 +28,7 @@ def gestion_usuarios():
             )
             option = input("Ingresar opcion: ")
 
-            if not validate_menu_options(option, max_args=2, min_args=0):
+            if not validate_menu_options(option, max_args=4, min_args=0):
                 continue
 
             match option:
@@ -49,9 +49,11 @@ def gestion_usuarios():
                         while True:
                             correo = input("Correo: ").strip()
                             if validate_input_format(correo, mode="email"):
+                                print("\nValidando correo...")
                                 if find_user("correo", correo):
                                     print("Ya existe un usuario con ese correo.")
                                     continue
+                                print("Correo valido.\n")
                                 break
                         while True:
                             residencia = (
@@ -90,7 +92,7 @@ def gestion_usuarios():
                         print(f"\nVista previa:\n{new_user}")
 
                         while True:
-                            print("Desea guardar el usuario?")
+                            print("\nDesea guardar el usuario?")
                             print("1. Si\t2. No (Volver)")
                             option = input("Ingresar opcion: ")
 
@@ -100,39 +102,52 @@ def gestion_usuarios():
                             if option == "2":
                                 print("Operacion cancelada")
                                 return
-                            add_user(new_user)
-                            print(
-                                f"\nUsuario '{new_user.nombre}' agregado exitosamente."
-                            )
+                            
+                            print("\nAgregando usuario...")
+                            if add_user(new_user):
+                                print(
+                                    f"\nUsuario agregado exitosamente."
+                                )
                             break
                         break
 
                 case "2":
+                    print("\nBuscando en base de datos...")
+                    if not find_user("", "", all=True):
+                        print(
+                            "No hay usuarios registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
                     while True:
                         print("\nBuscar usuario")
                         print("Ingrese el criterio de busqueda:")
                         print(
-                            "1. Nombre    2. Apellido    3. Correo    4. Telefono    5. Afiliacion    6. ID    7. Ver todos"
+                            "1. Nombre    2. Apellido    3. Correo    4. Residencia\n" 
+                            "5. Telefono    6. Afiliacion    7. ID    8. Ver todos" 
                         )
                         option = input("Ingresar opcion: ")
 
-                        if option == "7":
+
+                        if option == "8":
+                            print("\nBuscando usuarios...")
                             for user in find_user("", "", all=True):
                                 print(user)
-                                print("-" * 20)
+                                print("-" * 50)
                             break
 
                         if not validate_menu_options(
                             option,
                             type="category",
                             object_name="usuario",
-                            max_args=5,
+                            max_args=8,
                         ):
                             continue
 
                         attribute = get_feat("usuario", option)
                         feature = input("Buscar: ").strip()
 
+                        print("\nBuscando usuarios...")
                         if users := find_user(attribute, feature):
                             for user in users:
                                 print(user)
@@ -144,23 +159,32 @@ def gestion_usuarios():
                             )
                             continue
                 case "3":
+                    print("\nBuscando en base de datos...")
+                    if not find_user("", "", all=True):
+                        print(
+                            "No hay usuarios registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
                     while True:
                         print("\nActualizar usuario")
                         print("Categorias de busqueda")
-                        print("1. Correo\t6. Id")
+                        print("3. Correo\t6. Id")
                         menu_option = input("Ingresa opcion: ")
 
                         if not validate_menu_options(
-                            menu_option, mode="equal", max_args=6, min_args=1
+                            menu_option, mode="equal", max_args=6, min_args=3
                         ):
                             continue
 
-                        if menu_option == "1":
-                            if not validate_input_format(menu_option, mode="email"):
-                                continue
 
                         busqueda = input("Buscar: ")
+                        
+                        if menu_option == "3":
+                            if not validate_input_format(busqueda, mode="email"):
+                                continue
 
+                        print("\nBuscando usuario...")
                         user = find_user(get_feat("usuario", menu_option), busqueda)
 
                         if not user:
@@ -175,12 +199,12 @@ def gestion_usuarios():
                             )
                             continue
 
-                        user = next(user)
-                        print("Informacion original")
+                        user = user[0]
+                        print("\nInformacion original")
                         print(user)
 
                         while True:
-                            print("Que informacion desea modificar:")
+                            print("\nQue informacion desea modificar:")
                             print(
                                 "1. Nombre    2. Apellido    3. Correo    4. Residencia    5. Telefono    6. Afiliacion"
                             )
@@ -220,6 +244,7 @@ def gestion_usuarios():
                                     print("Cambios descartados.")
                                     return
 
+                                print("\nActualizando usuario...")
                                 if upd_user(user):
                                     print(f"\nUsuario actualizado exitosamente.")
                                 else:
@@ -231,6 +256,13 @@ def gestion_usuarios():
                         break
 
                 case "4":
+                    print("\nBuscando en base de datos...")
+                    if not find_user("", "", all=True):
+                        print(
+                            "No hay usuarios registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+                      
                     while True:
                         print("\nEliminar usuario")
                         id_user = (
@@ -242,9 +274,10 @@ def gestion_usuarios():
                         )
 
                         found_users = []
+                        # If find_user returns None, it means no user was found
+                        print("\nBuscando usuarios...")
                         for id in id_user:
-                            # If find_user returns None, it means no user was found
-                            try:
+                            try:    
                                 for user in find_user("id", id.strip()):
                                     found_users.append(user)
                             except TypeError:
@@ -256,7 +289,7 @@ def gestion_usuarios():
                         print("\nVista previa de los usuarios a eliminar:")
                         for user in found_users:
                             print(user)
-                            print("-" * 20)
+                            print("-" * 50)
 
                         while True:
                             print("\nConfirme la eliminacion de los usuarios:")
@@ -275,10 +308,12 @@ def gestion_usuarios():
                                 print("Abortando eliminacion de usuarios...")
                                 break
 
-                            if del_user(id_user, mode="single", sort=True):
+                            print("\nEliminando usuario...")
+                            if del_user(id_user, sort=True):
                                 print(f"\nUsuario eliminado exitosamente.")
                                 for user in found_users:
                                     print(user)
+                                    print("-" * 50)
                             else:
                                 print(f"\nError al eliminar los usuarios.")
                             break

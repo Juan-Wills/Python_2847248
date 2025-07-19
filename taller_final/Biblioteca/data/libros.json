@@ -2,24 +2,6 @@
   "libros": [
     {
       "id": "1",
-      "titulo": "La sombra del viento",
-      "genero": "Novela",
-      "autor": "Carlitos",
-      "editorial": "Casa Pajaro",
-      "fecha_publicacion": "10/10/1997",
-      "disponible": false
-    },
-    {
-      "id": "2",
-      "titulo": "El Coronel No Tiene Quien Le Escriba",
-      "genero": "Realismo magico",
-      "autor": "Gabriel Garcia Marquez",
-      "editorial": "Para Todos",
-      "fecha_publicacion": "20/12/1957",
-      "disponible": false
-    },
-    {
-      "id": "3",
       "titulo": "Cien A\u00f1os de Soledad",
       "genero": "Realismo magico",
       "autor": "Gabriel Garcia Marquez",
@@ -28,13 +10,22 @@
       "disponible": false
     },
     {
-      "id": "4",
-      "titulo": "El Aleph",
+      "id": "2",
+      "titulo": "La Faena",
       "genero": "Ficcion",
       "autor": "Jorge Luis Borges",
       "editorial": "Editorial Sur",
       "fecha_publicacion": "01/01/1945",
-      "disponible": true
+      "disponible": false
+    },
+    {
+      "id": "3",
+      "titulo": "Controle Su Destino",
+      "genero": "Autoayuda",
+      "autor": "Tony Robins",
+      "editorial": "Debolsillo",
+      "fecha_publicacion": "12/10/2021",
+      "disponible": false
     }
   ]
 }

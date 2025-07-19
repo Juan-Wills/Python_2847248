@@ -16,18 +16,26 @@ def gestion_multas():
 
             if not validate_menu_options(option, max_args=2, min_args=0):
                 continue
-
+            
             match option:
                 case "0":
                     return
                 case "2":
+                    print("\nBuscando en base de datos...")
+                    if not find_loan("", "", all=True):
+                        print(
+                            "No hay prestamos registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+                    
+                    # Update loan's fine records
+                    upd_fines()
                     while True:
-                        # Update loan's fine records
-                        upd_fines()
 
                         print("\nPagar multa pendiente")
                         id_loan = input("Ingresa el ID del prestamo: ")
 
+                        print("\nBuscando prestamo...")
                         if loan := find_loan("id", id_loan):
                             loan= loan[0]
                             print()
@@ -62,7 +70,8 @@ def gestion_multas():
                                 if valor <= 0:
                                     print("El valor debe ser mayor a 0.")
                                     continue
-
+                                
+                                print("\nActualizando prestamos...")
                                 if pay_fine(loan, valor):
                                     print(f"\nLa multa ha sido pagada exitosamente.")
                                 else:
@@ -80,9 +89,16 @@ def gestion_multas():
                             continue
 
                 case "1":
+                    print("\nBuscando en base de datos...")
+                    if not find_loan("", "", all=True):
+                        print(
+                            "No hay prestamos registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
+                    # Update loan's fine records
+                    upd_fines()
                     while True:
-                        # Update loan's fine records
-                        upd_fines()
 
                         print("\nVer registro de multas")
                         print("Elegir categoria: ")
@@ -118,7 +134,7 @@ def gestion_multas():
                                 if greater_than == "1":
                                     loans.sort(key=lambda x: x.multa)
 
-                                else:
+                                if greater_than == "2":
                                     loans.sort(key=lambda x: x.multa, reverse=True)
 
                                 for loan in loans:
@@ -131,6 +147,7 @@ def gestion_multas():
                             attribute = get_feat("prestamo", option)
                             filter = input("Buscar: ").title().strip()
 
+                            print("\nBuscando prestamos...")
                             if loans := find_loan(attribute, filter):
                                 for loan in loans:
                                     print("-" * 50)
@@ -148,8 +165,8 @@ def gestion_multas():
                     )
 
         except (KeyboardInterrupt, EOFError):
-            print("\nPrograma cerrado forzosamente")
-            return
+            return print("\nSeccion cancelada por el usuario.")
+
         
 
 if __name__ == "__main__":

@@ -46,7 +46,8 @@ def gestion_prestamos():
 
                         if not validate_input_format(book_id):
                             continue
-
+                        
+                        print("\nBuscando libro...")
                         if book := find_book("id", book_id):
                             book = book[0]
                             if not book.disponible:
@@ -83,8 +84,14 @@ def gestion_prestamos():
                         if not validate_input_format(user_mail, mode="email"):
                             continue
 
+                        print("\nBuscando usuario...")
                         if user := find_user("correo", user_mail):
                             user = user[0]
+                            if user.afiliacion == False:
+                                print(
+                                    f"El usuario '{user.correo}' no esta afiliado a la biblioteca, por favor afiliarlo antes de continuar."
+                                )
+                                continue
                             print(f"\nVista previa:\n{user}\n")
                             print("Es este el usuario esperado?")
                             print("1. Confirmar    2. Rechazar")
@@ -117,6 +124,12 @@ def gestion_prestamos():
                             loan_date = datetime.today().date()
                         else:
                             loan_date = datetime.strptime(loan_date, "%d/%m/%Y").date()
+
+                            if loan_date < datetime.today().date():
+                                print(
+                                    "La fecha de prestamo no puede ser posterior a la fecha actual."
+                                )
+                                continue
                         break
 
                     while True:
@@ -159,20 +172,28 @@ def gestion_prestamos():
                             print("Operacion cancelada")
                             return
 
+                        print("\nAgregando prestamo...")
                         # update book availability
                         book= find_book("id", book_id)[0]
                         book.disponible = False
                         upd_book(book)
 
                         # add new loan
-                        add_loan(new_prestamo)
-                        print(
-                            f"\nPrestamo del libro '{new_prestamo.libro}' al usuario '{new_prestamo.usuario}' agregado exitosamente."
-                        )
+                        if add_loan(new_prestamo):
+                            print(
+                                f"\nPrestamo del libro '{new_prestamo.libro}' al usuario '{new_prestamo.usuario}' agregado exitosamente."
+                            )
                         break
                     break
 
                 case "2":
+                    print("\nBuscando en base de datos...")
+                    if not find_loan("", "", all=True):
+                        print(
+                            "No hay prestamos registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
                     while True:
                         print("\nVer registros de prestamos")
                         print("Elegir categoria: ")
@@ -182,7 +203,7 @@ def gestion_prestamos():
                         option = input("Ingresar opcion: ")
 
                         if option == "7":
-                            print()
+                            print("\nBuscando prestamos...")
                             for loan in find_loan("", "", all=True):
                                 print(loan)
                                 print("-" * 50)
@@ -199,6 +220,7 @@ def gestion_prestamos():
                         attribute = get_feat("prestamo", option)
                         filter = input("Buscar: ").title().strip()
 
+                        print("\nBuscando prestamos...")
                         if loans := find_loan(attribute, filter):
                             for loan in loans:
                                 print("-" * 50)
@@ -219,13 +241,34 @@ def gestion_prestamos():
                         continue
 
                 case "3":
+                    print("\nBuscando en base de datos...")
+                    if not find_loan("", "", all=True):
+                        print(
+                            "No hay prestamos registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
                     while True:
                         print("\nRegistrar devolucion")
                         id_loan = input("Ingrese el ID del prestamo: ")
 
+                        print("\nBuscando prestamos...")
                         if loan := find_loan("id", id_loan):
                             loan = loan[0]
-                            print(f"\nVPrestamo encontrado:\n{loan}")
+
+                            if not book_loaned(loan.libro):
+                                print(
+                                    f"El libro '{loan.libro}' no se encuentra prestado."
+                                )
+                                continue
+                            
+                            if loan.estado == "Libro devuelto" or loan.estado == "Libro devuelto (Multa pagada)":
+                                print(
+                                    f"El libro '{loan.libro}' ya ha sido devuelto."
+                                )
+                                continue
+
+                            print(f"\nPrestamo encontrado:\n{loan}")
                             print("\nEs este el prestamo esperado?")
                             print("1. Confirmar    2. Rechazar")
                             option = input("Ingresar opcion: ")
@@ -238,30 +281,45 @@ def gestion_prestamos():
                             if option == "2":
                                 print("Operacion cancelada")
                                 continue
-
+                           
                             loan.fecha_devolucion =  datetime.today().strftime('%d/%m/%Y')
                             loan.marcar_devuelto()
 
-                             # update book availability
-                            book= find_book("titulo", loan.libro)[0]
-                            book.disponible = True
-                            upd_book(book)
+                            print("\nActualizando prestamo...")
+                            # update book availability
+                            if book:= find_book("titulo", loan.libro):
+                                book = book[0]
+                                book.disponible = True
+                                upd_book(book)
 
-                            # update loan
-                            upd_loan_devolution(loan)
-                            print(
-                                f"\nPrestamo del libro '{loan.libro}' al usuario '{loan.usuario}' actualizado exitosamente."
-                            )
-                            break
+                                # update loan
+                                upd_loan_devolution(loan)
+                                print(
+                                    f"\nPrestamo del libro '{loan.libro}' al usuario '{loan.usuario}' actualizado exitosamente."
+                                )
+                                break
+                            else:
+                                print(
+                                    f"No se encontro el libro '{loan.libro}' en la base de datos."
+                                )
+                                continue
                         else:
                             print("No se encontraron prestamos registrados.")
 
                 case "4":
+                    print("\nBuscando en base de datos...")
+                    if not find_loan("", "", all=True):
+                        print(
+                            "No hay prestamos registrados en la base de datos, por favor ingrese un libro antes de intentar buscar."
+                        )
+                        continue
+
                     print("\nReporte de libros mas prestados")
                     list_loans = []
                     count_loans = []
                     count= 0
 
+                    print("\nBuscando prestamos...")
                     for loan in find_loan("", "", all=True):
                         list_loans.append(loan.to_dict()["libro"])
 
@@ -279,8 +337,8 @@ def gestion_prestamos():
                         "Valor ingresado no valido, ingrese un valor que corresponda a las opciones del menu de navegacion."
                     )
         except (KeyboardInterrupt, EOFError):
-            print("\nPrograma cerrado forzosamente")
-            return
+            return print("\nSeccion cancelada por el usuario.")
+
 
 if __name__ == "__main__":
     gestion_prestamos()
