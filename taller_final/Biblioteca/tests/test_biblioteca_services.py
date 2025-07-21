@@ -3,7 +3,8 @@
 # IMPORTANT: Do not execute this file with pytest, it will not work as expected, execute it as a script.
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import datetime
 from models.prestamo import Prestamo
 from models.usuario import Usuario
@@ -37,10 +38,10 @@ if test_mode:
             print("\nAgregar prestamo:")
             new_prestamo = Prestamo(
                 id="1",
-                libro= find_book("id", "1")[0].titulo,
-                usuario= find_user("id", "1")[0].correo,
-                fecha_prestamo= "2023-10-01",
-                fecha_devolucion= "2023-10-15",
+                libro=find_book("id", "1")[0].titulo,
+                usuario=find_user("id", "1")[0].correo,
+                fecha_prestamo="2023-10-01",
+                fecha_devolucion="2023-10-15",
             )
 
             if add_loan(new_prestamo):
@@ -61,7 +62,9 @@ if test_mode:
                     print("\nCategorias disponibles:")
                     print(categories)
                     while True:
-                        filter_by = input("\nIngrese la categoria para filtrar: ").strip()
+                        filter_by = input(
+                            "\nIngrese la categoria para filtrar: "
+                        ).strip()
                         if filter_by in categories:
                             break
                         print(
@@ -91,9 +94,7 @@ if test_mode:
                             loan = loans[0]
                             print(f"\nPrestamo encontrado para actualizar:\n{loan}")
                             devolcion = (
-                                input(f"\nActualizar {filter_by}: ")
-                                .title()
-                                .strip()
+                                input(f"\nActualizar {filter_by}: ").title().strip()
                             )
                             if not devolcion:
                                 devolcion = datetime.date.today()
@@ -108,11 +109,18 @@ if test_mode:
                         print("No se encontraron prestamos registrados")
 
                 except AttributeError:
-                    print("No se puede realizar esta accion con el filtro proporcionado.")
+                    print(
+                        "No se puede realizar esta accion con el filtro proporcionado."
+                    )
                     print("(Asegurese de no filtrar por todos los registros)")
 
                 # End test mode
-                if input("\nTerminar test de la vista prestamos? (si/no): ").strip().lower() == "no":
+                if (
+                    input("\nTerminar test de la vista prestamos? (si/no): ")
+                    .strip()
+                    .lower()
+                    == "no"
+                ):
                     continue
                 print("\nModo de prueba finalizado.")
                 break
@@ -192,7 +200,9 @@ if test_mode:
                             print(f"\nUsuario encontrado para actualizar:\n{user}")
                             while True:
                                 new_value = (
-                                    input(f"\nIngrese el nuevo valor para '{filter_by}': ")
+                                    input(
+                                        f"\nIngrese el nuevo valor para '{filter_by}': "
+                                    )
                                     .title()
                                     .strip()
                                     .lower()
@@ -200,7 +210,10 @@ if test_mode:
                                 if filter_by == "afiliacion":
                                     if new_value == "true" or new_value == "afiliado":
                                         new_value = True
-                                    elif new_value == "false" or new_value == "no afiliado":
+                                    elif (
+                                        new_value == "false"
+                                        or new_value == "no afiliado"
+                                    ):
                                         new_value = False
                                     else:
                                         print(
@@ -221,7 +234,9 @@ if test_mode:
                         print("(Asegurese de no filtrar por todos los registros)")
 
                 except AttributeError:
-                    print("No se puede realizar esta accion con el filtro proporcionado.")
+                    print(
+                        "No se puede realizar esta accion con el filtro proporcionado."
+                    )
                     print("(Asegurese de no filtrar por todos los registros)")
 
                 # Delete user
@@ -243,16 +258,22 @@ if test_mode:
                         print("(Asegurese de no filtrar por todos los registros)")
 
                 except AttributeError:
-                    print("No se puede realizar esta accion con el filtro proporcionado.")
+                    print(
+                        "No se puede realizar esta accion con el filtro proporcionado."
+                    )
                     print("(Asegurese de no filtrar por todos los registros)")
 
                 # End test mode
-                if input("\nTerminar test de la vista usuario? (si/no): ").strip().lower() == "no":
+                if (
+                    input("\nTerminar test de la vista usuario? (si/no): ")
+                    .strip()
+                    .lower()
+                    == "no"
+                ):
                     continue
                 print("\nModo de prueba finalizado.")
                 break
             break
-
 
         print("\n----------------Vista de multas----------------")
         # Multas view
@@ -315,13 +336,15 @@ if test_mode:
                 print("(Asegurese de no filtrar por todos los registros)")
 
                 # End test mode
-                if input("Terminar test de la vista multas? (si/no): ").strip().lower() == "no":
+                if (
+                    input("Terminar test de la vista multas? (si/no): ").strip().lower()
+                    == "no"
+                ):
                     print("\nModo de prueba finalizado.")
                     continue
                 print("\nModo de prueba finalizado.")
                 break
             break
-
 
         print("----------------Vista de libros----------------")
         # Libros view
@@ -386,7 +409,9 @@ if test_mode:
                                 book = books[0]
                                 print(f"\nLibro encontrado para actualizar:\n{book}")
                                 new_value = (
-                                    input(f"\nIngrese el nuevo valor para '{filter_by}': ")
+                                    input(
+                                        f"\nIngrese el nuevo valor para '{filter_by}': "
+                                    )
                                     .title()
                                     .strip()
                                 )
@@ -402,7 +427,9 @@ if test_mode:
                             print("(Asegurese de no filtrar por todos los registros)")
 
                 except AttributeError:
-                    print("No se puede realizar esta accion con el filtro proporcionado.")
+                    print(
+                        "No se puede realizar esta accion con el filtro proporcionado."
+                    )
                     print("(Asegurese de no filtrar por todos los registros)")
 
                 # Delete book
@@ -422,11 +449,18 @@ if test_mode:
                         print("(Asegurese de no filtrar por todos los registros)")
 
                 except AttributeError:
-                    print("No se puede realizar esta accion con el filtro proporcionado.")
+                    print(
+                        "No se puede realizar esta accion con el filtro proporcionado."
+                    )
                     print("(Asegurese de no filtrar por todos los registros)")
 
                 # End test mode
-                if input("\nTerminar test de la vista libros? (si/no): ").strip().lower() == "no":
+                if (
+                    input("\nTerminar test de la vista libros? (si/no): ")
+                    .strip()
+                    .lower()
+                    == "no"
+                ):
                     print("\nModo de prueba finalizado.")
                     continue
                 print("\nModo de prueba finalizado.")
@@ -435,4 +469,6 @@ if test_mode:
     except (KeyboardInterrupt, EOFError):
         print("\nModo de prueba interrumpido por el usuario.")
 else:
-    print("Se necesita activar el modo de prueba para ejecutar este archivo, edite el archivo 'config.py' y cambie 'test_mode' a True.")
+    print(
+        "Se necesita activar el modo de prueba para ejecutar este archivo, edite el archivo 'config.py' y cambie 'test_mode' a True."
+    )

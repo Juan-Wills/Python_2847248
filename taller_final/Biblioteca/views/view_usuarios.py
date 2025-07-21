@@ -10,6 +10,7 @@ from services.validation_and_dataManagement_service import (
     autoincrement,
     get_feat,
 )
+import re
 from models.usuario import Usuario
 
 
@@ -75,7 +76,7 @@ def gestion_usuarios():
 
                         while True:
                             afiliacion = validate_input_format(
-                                input("Es afiliado? (Si/No): ").strip().lower(),
+                                input("Esta afiliado? (Si/No): ").strip().lower(),
                                 mode="boolean",
                             )
                             break
@@ -208,7 +209,7 @@ def gestion_usuarios():
                             print(
                                 "1. Nombre    2. Apellido    3. Correo    4. Residencia    5. Telefono    6. Afiliacion"
                             )
-                            modificar = input("Ingresar opcion: ")
+                            modificar = input("Ingresar opcion: ").strip()
 
                             attribute = get_feat("usuario", modificar)
 
@@ -219,11 +220,27 @@ def gestion_usuarios():
                                 object_name="usuario",
                             ):
                                 continue
-
+                                
                             print(
-                                f"{attribute.capitalize()} anterior: {getattr(user, attribute)}"
+                                f"{attribute.capitalize()} anterior: ",
+                                end= ''
                             )
+
+                            if modificar == "6":
+                                print(
+                                    f"{'Afiliado' if user.afiliacion else 'No afiliado'}"
+                                )
+                            else:
+                                print(getattr(user, attribute))
+
                             new_info = input("Ingresar nuevo valor: ").title().strip()
+
+                            if modificar == "6":
+                                if new_info == "Afiliado" or  new_info == "True":
+                                    new_info = True
+                                elif new_info == "No Afiliado" or new_info == "False":
+                                    new_info = False
+
                             setattr(user, attribute, new_info)
 
                             while True:
@@ -267,11 +284,16 @@ def gestion_usuarios():
                         print("\nEliminar usuario")
                         id_user = (
                             input(
-                                "Ingrese los Id de los usuarios a eliminar (separados por comas): "
+                                "Ingrese los Id de los usuarios a eliminar: "
                             )
                             .strip()
                             .split(",")
                         )
+
+                        if len(id_user) == 1 and not id_user[0].isnumeric():
+                            if re.fullmatch(r"\d[,]+\s*?\d", id_user[0]) is None:
+                                print("Error: Ingrese los id's separados por comas.")
+                                continue
 
                         found_users = []
                         # If find_user returns None, it means no user was found
@@ -299,7 +321,6 @@ def gestion_usuarios():
                             if not validate_menu_options(
                                 option,
                                 mode="equal",
-                                min_args=1,
                                 max_args=2,
                             ):
                                 continue
@@ -311,9 +332,6 @@ def gestion_usuarios():
                             print("\nEliminando usuario...")
                             if del_user(id_user, sort=True):
                                 print(f"\nUsuario eliminado exitosamente.")
-                                for user in found_users:
-                                    print(user)
-                                    print("-" * 50)
                             else:
                                 print(f"\nError al eliminar los usuarios.")
                             break

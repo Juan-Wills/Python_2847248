@@ -16,59 +16,23 @@
       "fecha_prestamo": "18/07/2025",
       "fecha_devolucion": "19/07/2025",
       "multa": 0,
-      "estado": "Libro devuelto"
+      "estado": "Libro devuelto (Multa pagada)"
     },
     {
       "id": "3",
       "libro": "Cien A\u00f1os de Soledad",
       "usuario": "juan@gmail.com",
-      "fecha_prestamo": "18/07/2025",
+      "fecha_prestamo": "18/06/2025",
       "fecha_devolucion": "18/07/2025",
-      "multa": 2000,
+      "multa": 4000,
       "estado": "Vencido"
     },
     {
       "id": "4",
-      "libro": "La sombra del viento",
-      "usuario": "juan@gmail.com",
-      "fecha_prestamo": "18/07/2025",
-      "fecha_devolucion": "20/07/2025",
-      "multa": 0,
-      "estado": "Pendiente"
-    },
-    {
-      "id": "5",
-      "libro": "Cien A\u00f1os de Soledad",
-      "usuario": "juan@gmail.com",
-      "fecha_prestamo": "18/07/2025",
-      "fecha_devolucion": "20/07/2025",
-      "multa": 0,
-      "estado": "Pendiente"
-    },
-    {
-      "id": "6",
-      "libro": "La Faena",
-      "usuario": "vale@gmail.com",
-      "fecha_prestamo": "20/07/2025",
-      "fecha_devolucion": "20/08/2025",
-      "multa": 0,
-      "estado": "Pendiente"
-    },
-    {
-      "id": "7",
-      "libro": "El Coronel No Tiene Quien Le Escriba",
-      "usuario": "sol@gmail.com",
-      "fecha_prestamo": "02/02/2025",
-      "fecha_devolucion": "03/02/2025",
-      "multa": 332000,
-      "estado": "Vencido"
-    },
-    {
-      "id": "8",
-      "libro": "Controle Su Destino",
-      "usuario": "juan@gmail.com",
-      "fecha_prestamo": "19/07/2025",
-      "fecha_devolucion": "21/07/2025",
+      "libro": "Maria",
+      "usuario": "jhon@gmail.com",
+      "fecha_prestamo": "21/07/2025",
+      "fecha_devolucion": "21/08/2025",
       "multa": 0,
       "estado": "Pendiente"
     }

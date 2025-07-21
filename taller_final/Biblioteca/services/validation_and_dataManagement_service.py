@@ -1,11 +1,13 @@
-import re 
+import re
 import json
 import datetime
 from pathlib import Path
+
 # Importing classes for attribute and name use
 from models.libro import Libro
-from models.usuario import Usuario 
+from models.usuario import Usuario
 from models.prestamo import Prestamo
+
 
 # Input validation
 def validate_input_format(
@@ -128,15 +130,21 @@ def json_data_path(file_name) -> str:
         file_name += ".json"
         print(file_name)
 
-    start_dir = Path.home() / 'Documents' # Assuming the data folder is in the Documents directory
+    start_dir = (
+        Path.home() / "Documents"
+    )  # Assuming the data folder is in the Documents directory
     try:
-        path = list(Path.rglob(start_dir, f"Python_2847248/taller_final/Biblioteca/data/{file_name}"))[0]
+        path = list(
+            Path.rglob(
+                start_dir, f"Python_2847248/taller_final/Biblioteca/data/{file_name}"
+            )
+        )[0]
     except IndexError:
         print(f"Error: No se pudo encontrar el archivo {file_name}.")
         print("Asegurese que el projecto este en la carpeta 'Documents'.")
         return None
-    path= path.resolve()
-  
+    path = path.resolve()
+
     try:
         # Just to check if the file exists
         with open(path, "r", encoding="utf-8"):
@@ -148,7 +156,7 @@ def json_data_path(file_name) -> str:
 
 # Data manipulation
 def retrieve_data(file_name, obj_name) -> dict:
-    if path:= json_data_path(file_name):
+    if path := json_data_path(file_name):
         try:
             with open(path, "r", encoding="utf-8") as file:
                 return convert_dict_to_obj(
@@ -166,8 +174,11 @@ def retrieve_data(file_name, obj_name) -> dict:
             )  # Create an valid structure if it doesn't exist
             return None
     else:
-        print(f"Error: No se pudo encontrar el archivo {file_name}. Asegurese de que el archivo exista.")
+        print(
+            f"Error: No se pudo encontrar el archivo {file_name}. Asegurese de que el archivo exista."
+        )
         return None
+
 
 def save(path, data: dict) -> bool:
     try:
@@ -205,7 +216,7 @@ def autoincrement(obj_name, data_file_name, pos=-1) -> str | None:
             f"Error: los argumentos no son validos, verifique que el nombre del archivo {data_file_name} sea valido, y que el nombre del objeto este bien escrito."
         )
         return None
-    
+
     if obj_name[-1] != "s":
         obj_name = obj_name + "s"  # Convert to plural form for the key
 
@@ -240,7 +251,7 @@ def convert_dict_to_obj(data: dict, obj_type) -> dict:
         return None
 
 
-def get_feat(object_name: str, index: str, all= False) -> str | bool:
+def get_feat(object_name: str, index: str, all=False) -> str | bool:
     try:
         index = int(index) - 1
     except ValueError:
@@ -256,7 +267,7 @@ def get_feat(object_name: str, index: str, all= False) -> str | bool:
             "nombre",
             "apellido",
             "correo",
-            "residencia",   
+            "residencia",
             "telefono",
             "afiliacion",
             "id",

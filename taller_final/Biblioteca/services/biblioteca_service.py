@@ -13,13 +13,13 @@ from tests.config import test_mode
 
 # CRUD books
 def add_book(libro: Libro) -> bool:
-    if data:= retrieve_data("libros.json", "libro"):
+    if data := retrieve_data("libros.json", "libro"):
         data["libros"].append(libro)
 
         if test_mode:
-            print('\n'+'*'*50)
+            print("\n" + "*" * 50)
             print("Test mode on")
-            print('*'*50)
+            print("*" * 50)
             return True
 
         if save(json_data_path("libros.json"), data):
@@ -32,7 +32,7 @@ def add_book(libro: Libro) -> bool:
 
 
 def find_book(filter_by: str, feature: str, all=False) -> list | bool:
-    if data:= retrieve_data("libros.json", "libro"):
+    if data := retrieve_data("libros.json", "libro"):
         if all:
             if len(data["libros"]) == 0:
                 return False
@@ -53,7 +53,7 @@ def find_book(filter_by: str, feature: str, all=False) -> list | bool:
 
 
 def upd_book(book: Libro) -> bool:
-    if data:= retrieve_data("libros.json", "libro"):
+    if data := retrieve_data("libros.json", "libro"):
         if isinstance(book, Libro):
             for i, b in enumerate(data["libros"]):
                 if b.id == book.id:
@@ -61,9 +61,9 @@ def upd_book(book: Libro) -> bool:
                     break
 
             if test_mode:
-                print('\n'+'*'*50)
+                print("\n" + "*" * 50)
                 print("Test mode on")
-                print('*'*50)
+                print("*" * 50)
                 return True
 
             if save(json_data_path("libros.json"), data):
@@ -76,7 +76,7 @@ def upd_book(book: Libro) -> bool:
 
 
 def del_book(identification: str | list, sort=False) -> list | bool:
-    if data:= retrieve_data("libros.json", "libro"):
+    if data := retrieve_data("libros.json", "libro"):
         i = None
         rmd_books = []
         try:
@@ -103,9 +103,9 @@ def del_book(identification: str | list, sort=False) -> list | bool:
 
             if rmd_books:
                 if test_mode:
-                    print('\n'+'*'*50)
+                    print("\n" + "*" * 50)
                     print("Test mode on")
-                    print('*'*50)
+                    print("*" * 50)
                     return rmd_books
 
                 if save(json_data_path("libros.json"), data):
@@ -115,19 +115,21 @@ def del_book(identification: str | list, sort=False) -> list | bool:
             return False
 
         except IndexError:
-            print("Error: No se pudo eliminar el libro, verifique que el id sea correcto.")
+            print(
+                "Error: No se pudo eliminar el libro, verifique que el id sea correcto."
+            )
             return False
 
 
 # CRUD users
 def add_user(user: Usuario) -> bool:
-    if data:= retrieve_data("usuarios.json", "usuario"):
+    if data := retrieve_data("usuarios.json", "usuario"):
         data["usuarios"].append(user)
 
         if test_mode:
-            print('\n'+'*'*50)
+            print("\n" + "*" * 50)
             print("Test mode on")
-            print('*'*50)
+            print("*" * 50)
             return True
 
         if save(json_data_path("usuarios.json"), data):
@@ -140,7 +142,7 @@ def add_user(user: Usuario) -> bool:
 
 
 def find_user(filter_by: str, feature: str | bool, all=False) -> list | bool:
-    if data:= retrieve_data("usuarios.json", "usuario"):
+    if data := retrieve_data("usuarios.json", "usuario"):
         if all:
             if len(data["usuarios"]) == 0:
                 return False
@@ -165,7 +167,7 @@ def find_user(filter_by: str, feature: str | bool, all=False) -> list | bool:
 
 
 def upd_user(user: Usuario) -> bool:
-    if data:= retrieve_data("usuarios.json", "usuario"):
+    if data := retrieve_data("usuarios.json", "usuario"):
         if isinstance(user, Usuario):
             for i, u in enumerate(data["usuarios"]):
                 if u.id == user.id:
@@ -173,9 +175,9 @@ def upd_user(user: Usuario) -> bool:
                     break
 
             if test_mode:
-                print('\n'+'*'*50)
+                print("\n" + "*" * 50)
                 print("Test mode on")
-                print('*'*50)
+                print("*" * 50)
                 return True
 
             if save(json_data_path("usuarios.json"), data):
@@ -185,10 +187,10 @@ def upd_user(user: Usuario) -> bool:
                     "Error: No se pudieron guardar los cambios, verifique los datos ingresados e intentelo de nuevo"
                 )
                 return False
-            
+
 
 def del_user(identification: list, sort=False) -> list | bool:
-    if data:= retrieve_data("usuarios.json", "usuario"):
+    if data := retrieve_data("usuarios.json", "usuario"):
         i = None
         rmd_user = []
 
@@ -213,9 +215,9 @@ def del_user(identification: list, sort=False) -> list | bool:
 
             if rmd_user:
                 if test_mode:
-                    print('\n'+'*'*50)
+                    print("\n" + "*" * 50)
                     print("Test mode on")
-                    print('*'*50)
+                    print("*" * 50)
                     return rmd_user
 
                 if save(json_data_path("usuarios.json"), data):
@@ -232,13 +234,13 @@ def del_user(identification: list, sort=False) -> list | bool:
 
 # CRUD loans
 def add_loan(loan: Prestamo):
-    if data:= retrieve_data("prestamos.json", "prestamo"):
+    if data := retrieve_data("prestamos.json", "prestamo"):
         data["prestamos"].append(loan)
 
         if test_mode:
-            print('\n'+'*'*50)
+            print("\n" + "*" * 50)
             print("Test mode on")
-            print('*'*50)
+            print("*" * 50)
             return True
 
         if save(json_data_path("prestamos.json"), data):
@@ -248,8 +250,9 @@ def add_loan(loan: Prestamo):
         )
         return False
 
+
 def find_loan(filter_by: str, feature: str, all=False):
-    if data:= retrieve_data("prestamos.json", "prestamo"):
+    if data := retrieve_data("prestamos.json", "prestamo"):
         if all:
             if len(data["prestamos"]) == 0:
                 return False
@@ -268,7 +271,7 @@ def find_loan(filter_by: str, feature: str, all=False):
 
 
 def upd_loan_devolution(loan: Prestamo):
-    if data:= retrieve_data("prestamos.json", "prestamo"):
+    if data := retrieve_data("prestamos.json", "prestamo"):
         if isinstance(loan, Prestamo):
             for i, l in enumerate(data["prestamos"]):
                 if l.id == loan.id:
@@ -278,9 +281,9 @@ def upd_loan_devolution(loan: Prestamo):
                     break
 
             if test_mode:
-                print('\n'+'*'*50)
+                print("\n" + "*" * 50)
                 print("Test mode on")
-                print('*'*50)
+                print("*" * 50)
                 return True
 
             if save(json_data_path("prestamos.json"), data):
@@ -294,23 +297,23 @@ def upd_loan_devolution(loan: Prestamo):
 
 # Update and pay fines
 def book_loaned(book_title) -> bool:
-    if data:= retrieve_data("prestamos.json", "prestamo"):
+    if data := retrieve_data("prestamos.json", "prestamo"):
         for loan in data["prestamos"]:
-            if getattr(loan, 'libro') == book_title:
+            if getattr(loan, "libro") == book_title:
                 return loan.usuario
         return False
 
 
 def upd_fines():
-    if data:= retrieve_data("prestamos.json", "prestamo"):
+    if data := retrieve_data("prestamos.json", "prestamo"):
         for loan in data["prestamos"]:
             if loan.vencido():
                 loan.actualizar_multa()
 
         if test_mode:
-            print('\n'+'*'*50)
+            print("\n" + "*" * 50)
             print("Test mode on")
-            print('*'*50)
+            print("*" * 50)
             return True
 
         if save(json_data_path("prestamos.json"), data):
@@ -323,9 +326,9 @@ def upd_fines():
 
 
 def pay_fine(loan: Prestamo, to_pay: int) -> bool:
-    if data:= retrieve_data("prestamos.json", "prestamo"):
-        i= None
-        id_found= False
+    if data := retrieve_data("prestamos.json", "prestamo"):
+        i = None
+        id_found = False
         for i, loans in enumerate(data["prestamos"]):
             if loans.id == loan.id:
                 id_found = True
@@ -334,7 +337,9 @@ def pay_fine(loan: Prestamo, to_pay: int) -> bool:
                 break
 
         if not id_found:
-            print("Error: No se pudo encontrar el prestamo, verifique que el ID sea correcto.")
+            print(
+                "Error: No se pudo encontrar el prestamo, verifique que el ID sea correcto."
+            )
             return False
 
         loan.pagar_multa(to_pay)
@@ -343,9 +348,9 @@ def pay_fine(loan: Prestamo, to_pay: int) -> bool:
             data["prestamos"][i] = loan
 
             if test_mode:
-                print('\n'+'*'*50)
+                print("\n" + "*" * 50)
                 print("Test mode on")
-                print('*'*50)
+                print("*" * 50)
                 return True
 
             if save(json_data_path("prestamos.json"), data):

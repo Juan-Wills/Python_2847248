@@ -11,12 +11,12 @@
     },
     {
       "id": "2",
-      "titulo": "La Faena",
+      "titulo": "La Alphea",
       "genero": "Ficcion",
       "autor": "Jorge Luis Borges",
       "editorial": "Editorial Sur",
       "fecha_publicacion": "01/01/1945",
-      "disponible": false
+      "disponible": true
     },
     {
       "id": "3",
@@ -26,6 +26,15 @@
       "editorial": "Debolsillo",
       "fecha_publicacion": "12/10/2021",
       "disponible": false
+    },
+    {
+      "id": "4",
+      "titulo": "Maria",
+      "genero": "Novela",
+      "autor": "Jorge Isaacs",
+      "editorial": "Panamericana Editorial",
+      "fecha_publicacion": "20/02/1867",
+      "disponible": true
     }
   ]
 }

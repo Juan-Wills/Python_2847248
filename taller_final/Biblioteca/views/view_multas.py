@@ -2,6 +2,18 @@ from services.validation_and_dataManagement_service import validate_menu_options
 from services.biblioteca_service import find_loan, pay_fine, upd_fines
 
 def gestion_multas():
+    try:
+        print("\nBuscando si existen prestamos registrados...")
+        if len(find_loan("", "", all=True)) == 0:
+            print(
+                "No hay prestamos registrados en la base de datos, por favor ingrese un prestamo antes de intentar buscar."
+            )
+            return
+        print("Prestamos encontrados, continuando con la gestion de multas...")
+    except Exception as e:
+        print(f"Error al buscar prestamos: {e}")
+        return
+    
     while True:
         try:
             print(
@@ -31,14 +43,12 @@ def gestion_multas():
                     # Update loan's fine records
                     upd_fines()
                     while True:
-
                         print("\nPagar multa pendiente")
                         id_loan = input("Ingresa el ID del prestamo: ")
 
                         print("\nBuscando prestamo...")
                         if loan := find_loan("id", id_loan):
                             loan= loan[0]
-                            print()
                             if not loan.vencido() and loan.multa == 0:
                                 print(
                                     f"El prestamo no tiene multa pendiente."
@@ -138,9 +148,9 @@ def gestion_multas():
                                     loans.sort(key=lambda x: x.multa, reverse=True)
 
                                 for loan in loans:
-                                    print("-" * 50)
                                     print(loan)
                                     print(f"  Multa pendiente: ${loan.multa}")
+                                    print("-" * 50)
                                 break
 
                         else:
@@ -150,9 +160,9 @@ def gestion_multas():
                             print("\nBuscando prestamos...")
                             if loans := find_loan(attribute, filter):
                                 for loan in loans:
-                                    print("-" * 50)
                                     print(loan)
                                     print(f"  Multa pendiente: ${loan.multa}")
+                                    print("-" * 50)
                                 break
                             else:
                                 print(

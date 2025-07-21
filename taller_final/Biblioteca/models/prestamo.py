@@ -1,58 +1,77 @@
 import datetime
 
+
 class Prestamo:
-    def __init__(self, id, libro, usuario, fecha_prestamo, fecha_devolucion, multa= None, estado= "Pendiente"):
+    def __init__(
+        self,
+        id,
+        libro,
+        usuario,
+        fecha_prestamo,
+        fecha_devolucion,
+        multa=None,
+        estado="Pendiente",
+    ):
         self.id = id
         self.libro = libro
         self.usuario = usuario
-        self.fecha_prestamo = fecha_prestamo if not (fecha_prestamo is None) else datetime.date.today().strftime('%d/%m/%Y')
+        self.fecha_prestamo = (
+            fecha_prestamo
+            if not (fecha_prestamo is None)
+            else datetime.date.today().strftime("%d/%m/%Y")
+        )
         self.fecha_devolucion = fecha_devolucion
-        self.multa= multa if not (multa is None) else 0
+        self.multa = multa if not (multa is None) else 0
         self.estado = estado
 
     def marcar_devuelto(self):
         self.estado = "Libro devuelto"
-        self.fecha_devolucion = datetime.date.today().strftime('%d/%m/%Y')
+        self.fecha_devolucion = datetime.date.today().strftime("%d/%m/%Y")
 
     def vencido(self):
-        if datetime.datetime.strptime(self.fecha_devolucion, '%d/%m/%Y').date() < datetime.datetime.today().date():
+        if (
+            datetime.datetime.strptime(self.fecha_devolucion, "%d/%m/%Y").date()
+            < datetime.datetime.today().date()
+        ):
             return True
         return False
-    
+
     def actualizar_multa(self):
-        aumento= 0
-        today= datetime.datetime.today().date()
-        self.fecha_devolucion = datetime.datetime.strptime(self.fecha_devolucion, '%d/%m/%Y').date()
+        aumento = 0
+        today = datetime.datetime.today().date()
+        self.fecha_devolucion = datetime.datetime.strptime(
+            self.fecha_devolucion, "%d/%m/%Y"
+        ).date()
         if self.fecha_devolucion < today:
-            days_difference= abs((self.fecha_devolucion - today).days)
+            days_difference = abs((self.fecha_devolucion - today).days)
             for _ in range(days_difference):
-                aumento+= 2000
+                aumento += 2000
 
             if self.multa != aumento:
-                self.multa= aumento - self.multa 
+                self.multa = aumento - self.multa
 
         elif self.fecha_devolucion >= today:
-            self.multa= 0
-        
-        self.fecha_devolucion = self.fecha_devolucion.strftime('%d/%m/%Y')
-        self.estado = "Vencido" if self.vencido() else "Pendiente"
+            self.multa = 0
 
+        self.fecha_devolucion = self.fecha_devolucion.strftime("%d/%m/%Y")
+        self.estado = "Vencido" if self.vencido() else "Pendiente"
 
     def pagar_multa(self, valor):
         if (self.multa - valor) == 0:
-            self.multa-= valor
+            self.multa -= valor
             self.estado = "Libro devuelto (Multa pagada)"
         return self.multa
-    
+
     def to_dict(self):
         return vars(self)
 
     def __str__(self):
-        return (f"Detalles de Prestamo\n"
-                f"  ID: {self.id}\n"
-                f"  Titulo del Libro: {self.libro}\n"
-                f"  Correo del Usuario: {self.usuario}\n"
-                f"  Fecha del Prestamo: {self.fecha_prestamo}\n"
-                f"  Fecha de Devolucion: {self.fecha_devolucion}\n"
-                f"  Estado del Prestamo: {self.estado}"
-                )
+        return (
+            f"Detalles de Prestamo\n"
+            f"  ID: {self.id}\n"
+            f"  Titulo del Libro: {self.libro}\n"
+            f"  Correo del Usuario: {self.usuario}\n"
+            f"  Fecha del Prestamo: {self.fecha_prestamo}\n"
+            f"  Fecha de Devolucion: {self.fecha_devolucion}\n"
+            f"  Estado del Prestamo: {self.estado}"
+        )

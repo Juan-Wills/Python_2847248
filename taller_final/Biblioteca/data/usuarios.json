@@ -11,8 +11,8 @@
     },
     {
       "id": "2",
-      "nombre": "Jesus Santiago",
-      "apellido": "Wills Jacome",
+      "nombre": "Jesus",
+      "apellido": "Wills",
       "correo": "santi@gmail.com",
       "residencia": "",
       "telefono": "",
@@ -20,12 +20,21 @@
     },
     {
       "id": "3",
-      "nombre": "Sol Jaqueline",
-      "apellido": "Jacome Trujillo",
+      "nombre": "Sol",
+      "apellido": "Jacome",
       "correo": "sol@gmail.com",
       "residencia": "Tunja, Boyaca, Colombia",
       "telefono": "3108427570",
       "afiliacion": false
+    },
+    {
+      "id": "4",
+      "nombre": "Jhon",
+      "apellido": "Mareas",
+      "correo": "jhon@gmail.com",
+      "residencia": "Barrio Venus, Dosquebradas",
+      "telefono": "3220698564",
+      "afiliacion": true
     }
   ]
 }

@@ -11,6 +11,7 @@ from services.validation_and_dataManagement_service import (
     get_feat,
 )
 from models.libro import Libro
+import re
 
 
 def gestion_libros():
@@ -71,10 +72,10 @@ def gestion_libros():
                         ):
                             continue
                         
-                        print("\nBuscando libros...")
                         attribute = get_feat("libro", option)
                         filter = input("Buscar: ").title().strip()
 
+                        print("\nBuscando libros...")
                         if books := find_book(attribute, filter):
                             for book in books:
                                 print(book)
@@ -239,11 +240,16 @@ def gestion_libros():
                         print("\nEliminar libro")
                         id_book = (
                             input(
-                                "Ingrese los Id de los libros a eliminar (separados por comas): "
+                                "Ingrese los Id de los libros a eliminar: "
                             )
                             .strip()
                             .split(",")
                         )
+
+                        if len(id_book) == 1 and not id_book[0].isnumeric():
+                            if re.fullmatch(r"\d[,]+\s*?\d", id_book[0]) is None:
+                                print("Error: Ingrese los id's separados por comas.")
+                                continue
 
                         found_books = []
                         # If find_book returns None, it means no book was found
@@ -273,7 +279,6 @@ def gestion_libros():
                             if not validate_menu_options(
                                 option,
                                 mode="equal",
-                                min_args=1,
                                 max_args=2,
                             ):
                                 continue
@@ -285,9 +290,6 @@ def gestion_libros():
                             print("\nEliminando libro...")
                             if del_book(id_book, sort=True):
                                 print(f"\nLibro/s eliminado exitosamente:")
-                                for book in found_books:
-                                    print(book)
-                                    print("-" * 50)
                             else:
                                 print("\nError al eliminar los libros.")
                             break
