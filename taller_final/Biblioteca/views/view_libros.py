@@ -52,7 +52,8 @@ def gestion_libros():
                         print("\nFiltrar libros")
                         print("Elegir categoria: ")
                         print(
-                            "1. Titulo    2. Autor    3. Genero    4. Editorial    5. Fecha    6. Id    7. Ver todos"
+                            "1. Titulo    2. Autor    3. Genero    4. Editorial\n" 
+                            "5. Fecha    6. Id    7. Ver todos"
                         )
                         option = input("Ingresar opcion: ")
 

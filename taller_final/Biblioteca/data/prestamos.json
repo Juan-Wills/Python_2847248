@@ -15,8 +15,8 @@
       "usuario": "santi@gmail.com",
       "fecha_prestamo": "18/07/2025",
       "fecha_devolucion": "19/07/2025",
-      "multa": 0,
-      "estado": "Libro devuelto (Multa pagada)"
+      "multa": 4000,
+      "estado": "Vencido"
     },
     {
       "id": "3",
@@ -32,9 +32,9 @@
       "libro": "Maria",
       "usuario": "jhon@gmail.com",
       "fecha_prestamo": "21/07/2025",
-      "fecha_devolucion": "21/08/2025",
+      "fecha_devolucion": "21/07/2025",
       "multa": 0,
-      "estado": "Pendiente"
+      "estado": "Libro devuelto"
     }
   ]
 }

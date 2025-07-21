@@ -31,7 +31,7 @@ def gestion_prestamos():
                 )
             )
 
-            option = input("Ingresar opcion: ")
+            option = input("Ingresar opcion: ").strip()
 
             if not validate_menu_options(option, max_args=4, min_args=0):
                 continue
@@ -92,6 +92,15 @@ def gestion_prestamos():
                                     f"El usuario '{user.correo}' no esta afiliado a la biblioteca, por favor afiliarlo antes de continuar."
                                 )
                                 continue
+                            
+                            if loans:=find_loan("usuario", user.correo):
+                                for loan in loans:
+                                    if loan.multa:
+                                        print(
+                                            f"El usuario '{user.correo}' tiene una multa por prestamo pendiente, se debe pagar la multa antes de continuar."
+                                        )
+                                        continue
+
                             print(f"\nVista previa:\n{user}\n")
                             print("Es este el usuario esperado?")
                             print("1. Confirmar    2. Rechazar")
@@ -198,7 +207,8 @@ def gestion_prestamos():
                         print("\nVer registros de prestamos")
                         print("Elegir categoria: ")
                         print(
-                            "1. Libro    2. Usuario    3. Fecha de Prestamo    4. Fecha de Devolucion    5. ID    6. Deuda acumulada    7. Ver todos"
+                            "1. Libro    2. Usuario    3. Fecha de Prestamo    4. Fecha de Devolucion\n" 
+                            "5. ID    6. Deuda acumulada    7. Ver todos"
                         )
                         option = input("Ingresar opcion: ")
 
@@ -268,6 +278,12 @@ def gestion_prestamos():
                                 )
                                 continue
 
+                            if loan.multa:
+                                print(
+                                    f"El prestamo presenta una multa pendiente de ${loan.multa}. Pague la multa antes de continuar."
+                                )
+                                continue
+
                             print(f"\nPrestamo encontrado:\n{loan}")
                             print("\nEs este el prestamo esperado?")
                             print("1. Confirmar    2. Rechazar")
@@ -295,7 +311,7 @@ def gestion_prestamos():
                                 # update loan
                                 upd_loan_devolution(loan)
                                 print(
-                                    f"\nPrestamo del libro '{loan.libro}' al usuario '{loan.usuario}' actualizado exitosamente."
+                                    f"\nPrestamo del libro '{loan.libro}' al usuario '{loan.usuario}' actualizado exitosamente.\nEstado del prestamo: {loan.estado}."
                                 )
                                 break
                             else:

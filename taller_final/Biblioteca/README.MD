@@ -1,175 +1,418 @@
 # **Sistema Gestor para Bibliotecas**
 
-Esta aplicacion fue realizada con la intencion de gestionar actividades en una biblioteca por mediode un CLI (Interfaz de Lineas de Comando). Presenta tanto funcionalidades CRUD (Crear, Leer, Actualizar, Eliminar) para la gestion de libros y usuario, como servicio de gestion de prestamo y multas.
+[![Python](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
+[![CLI](https://img.shields.io/badge/Interface-CLI-green.svg)](https://es.wikipedia.org/wiki/Interfaz_de_l%C3%ADnea_de_comandos)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MI### 🏛️ Patrón de Arquitectura
 
-## Cómo ejecutar el programa
+El proyecto sigue una **arquitectura en capas** para mantener la separación de responsabilidades:
 
-- Clonar el repositorio:
+#### Capas del Sistema
 
-    [Github Repo](https://github.com/Juan-Wills/Python_2847248.git)
+1. **Capa de Presentación** (`views/`)
+   - Interfaces de usuario CLI
+   - Gestión de entrada y salida
+   - Navegación entre menús
 
-    `git clone https://github.com/Juan-Wills/Python_2847248.git`
+2. **Capa de Lógica de Negocio** (`services/`)
+   - Reglas de negocio de la biblioteca
+   - Validaciones complejas
+   - Gestión de operaciones CRUD
 
-- Ingresar a la carpeta del projecto:
+3. **Capa de Datos** (`models/`)
+   - Definición de entidades
+   - Estructura de datos
+   - Métodos de serialización
 
-    `cd taller_final/Biblioteca`
+4. **Capa de Persistencia** (`data/`)
+   - Almacenamiento en JSON
+   - Gestión de archivos
+   - Backup y recuperación
 
-- Ejecutar el programa:
+### 🎯 Decisiones de Diseño Clave
 
-    `python main.py`
+#### **Separación de Responsabilidades**
+- **Validaciones independientes**: Se creó un servicio separado para validaciones (`validation_and_dataManagement_service.py`) para mantener la lógica de negocio limpia
+- **Servicios especializados**: Cada funcionalidad tiene su propia vista y lógica
+
+#### **Escalabilidad**
+- **CRUD completo**: Implementación de operaciones Create, Read, Update, Delete para futuras expansiones
+- **Modelos extensibles**: Estructura de clases que permite agregar nuevos campos fácilmente
+- **Servicios modulares**: Fácil adición de nuevas funcionalidades
+
+#### **Experiencia de Usuario**
+- **Interfaz intuitiva**: Menús numerados y navegación clara
+- **Validación en tiempo real**: Feedback inmediato al usuario
+- **Confirmaciones**: Prevención de errores con confirmaciones de acciones críticas
+
+#### **Mantenibilidad**
+- **Código documentado**: Comentarios y estructura clara
+- **Testing integrado**: Suite de pruebas para validar funcionalidad
+- **Configuración externa**: Separación de configuración del código
+
+### 🔧 Tecnologías y Herramientas
+
+| Tecnología | Versión | Propósito |
+|------------|---------|-----------|
+| **Python** | 3.13.5 | Lenguaje principal |
+| **Pytest** | 8.4.1 | Framework de testing |
+| **JSON** | Nativo | Persistencia de datos |
+
+### 📊 Características Técnicas
+
+- **Persistencia**: Archivos JSON para almacenamiento ligero
+- **Validación**: Sistema robusto de validación de datos
+- **Error Handling**: Manejo graceful de errores
+- **Testing**: Cobertura completa de pruebas unitarias
+
+## 📞 Soporte y Contacto
+
+- **GitHub Issues**: [Reportar problemas](https://github.com/Juan-Wills/Python_2847248/issues)
+- **Documentación**: Ver este README y comentarios en el código
+
+## 🙏 Agradecimientos
+
+- Desarrollado como parte del curso de Python
+- Inspirado en sistemas reales de gestión bibliotecaria
+- Gracias a la comunidad de Python por las herramientas utilizadas
 
 
-## Dependencias requeridas
+## 📋 Tabla de Contenidos
 
-- Instalar dependencias:
+- [Características](#-características)
+- [Instalación](#-instalación)
+- [Uso](#-uso)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Funcionalidades](#-funcionalidades)
+- [Testing](#-testing)
+- [Arquitectura](#-arquitectura)
+- [Contribuir](#-contribuir)
+- [Licencia](#-licencia)
 
-    `pip install -r requirements.txt`
+## ✨ Características
 
->Para mas informacion revisar el documento "requirements.txt" e ir a la documentacion de cada dependencia.
+- **Gestión de Libros**: CRUD completo para el inventario de libros
+- **Gestión de Usuarios**: Administración de usuarios de la biblioteca
+- **Sistema de Préstamos**: Control de préstamos y devoluciones
+- **Gestión de Multas**: Cálculo automático y administración de multas por retrasos
+- **Reportes**: Estadísticas de libros más prestados
+- **Validación de Datos**: Sistema robusto de validación de entradas
+- **Interfaz CLI**: Interfaz de línea de comandos intuitiva y fácil de usar
+- **Persistencia de Datos**: Almacenamiento en archivos JSON
 
-## Navegar la aplicacion
+## 🚀 Instalación
 
-Al momento de ejecutar el programa se mostrara el menu principal, 
-despues se debera elegir alguna de las opciones disponibles enumeradas por medio de su indice.
+### Opción 1: Clonar desde GitHub
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/Juan-Wills/Python_2847248.git
+
+# Navegar al directorio del proyecto
+cd Python_2847248/taller_final/Biblioteca
+
+# Crear un entorno virtual (recomendado)
+python -m venv biblioteca_env
+
+# Activar el entorno virtual
+# En Windows:
+biblioteca_env\Scripts\activate
+# En macOS/Linux:
+source biblioteca_env/bin/activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+```
+
+### Opción 2: Instalación con Conda
+
+```bash
+# Crear entorno desde el archivo requirements.txt
+conda create --name biblioteca --file requirements.txt
+
+# Activar el entorno
+conda activate biblioteca
+```
+
+## 🎯 Uso
+
+### Ejecutar la Aplicación
+
+```bash
+python main.py
+```
+
+### Primeros Pasos
+
+1. **Ejecutar el programa**: Al iniciar, se mostrará el menú principal
+2. **Navegar**: Use los números para seleccionar opciones
+3. **Agregar datos**: Comience agregando usuarios y libros antes de crear préstamos
+4. **Seguir instrucciones**: La aplicación guiará paso a paso cada proceso
+
+### Dependencias Principales
+
+Las dependencias se instalan automáticamente con el comando anterior:
+
+- **pytest**: Framework de testing
+- **typing_extensions**: Extensiones de tipado para Python
+
+## 📖 Guía de Usuario
+
+### Menú Principal
+
+Al ejecutar el programa se mostrará el menú principal:
 
 ![img main.py menu](imgs%20MD/main%20menu.jpg)
 
-Una vez elegida alguna opcion, se redirigira a alguna de las siguientes vistas:
+### Opciones Disponibles
 
-**Libros**
-        
+1. **Libros** - Gestión del inventario de libros
+2. **Usuarios** - Administración de usuarios
+3. **Préstamos y Devoluciones** - Control de préstamos
+4. **Multas** - Gestión de multas y pagos
+
+#### 📚 Gestión de Libros
+
 ![img book main menu](imgs%20MD/book%20main%20menu.jpg)
 
-**Usuario**
+**Funcionalidades disponibles:**
+- ➕ **Agregar libro**: Registrar nuevos libros en el inventario
+- 🔍 **Buscar libro**: Encontrar libros por diferentes criterios
+- ✏️ **Actualizar libro**: Modificar información de libros existentes
+- 🗑️ **Eliminar libro**: Remover libros del sistema
+
+#### 👥 Gestión de Usuarios
 
 ![img user main menu](imgs%20MD/user%20main%20menu.jpg)
 
-**Prestamo y Devoluciones**
+**Funcionalidades disponibles:**
+- ➕ **Agregar usuario**: Registrar nuevos usuarios
+- 🔍 **Buscar usuario**: Encontrar usuarios por diferentes criterios
+- ✏️ **Actualizar usuario**: Modificar información de usuarios
+- 🗑️ **Eliminar usuario**: Remover usuarios del sistema
+
+#### 📋 Gestión de Préstamos
 
 ![img loan main menu](imgs%20MD/loan%20main%20menu.jpg)
 
-**Multas**
+**Funcionalidades disponibles:**
+- ➕ **Crear préstamo**: Registrar nuevos préstamos
+- 🔍 **Consultar préstamos**: Ver historial de préstamos
+- 📥 **Registrar devolución**: Procesar devoluciones de libros
+- 📊 **Reporte de libros más prestados**: Estadísticas de préstamos
 
-![img fine main menu](imgs%20MD/multa%20main%20menu.jpg)
+#### 💰 Gestión de Multas
 
-### Libros y Usuario
+![img fine main menu](imgs%20MD/fine%20main%20menu.jpg)
 
-Debido a que la estructura de usuarios y libros resulta ser similar, se explicaran sus funcionalidades de manera conjunta.
+**Funcionalidades disponibles:**
+- 🔍 **Consultar multas**: Ver multas pendientes y pagadas
+- 💳 **Pagar multa**: Procesar pagos de multas
 
-#### Agregar nuevo registro
+## 🛠️ Estructura del Proyecto
 
-El usuario debera llenar los campos con las caracteristicas del "sujeto" (libro o usuario) que desea ingresar.
+```
+Biblioteca/
+├── main.py                   
+├── requirements.txt           
+├── README.MD                 
+├── data/                     
+│   ├── libros.json          
+│   ├── usuarios.json        
+│   └── prestamos.json       
+├── models/                  
+│   ├── libro.py             
+│   ├── usuario.py           
+│   └── prestamo.py          
+├── services/                
+│   ├── biblioteca_service.py
+│   └── validation_and_dataManagement_service.py 
+├── views/                    
+│   ├── view_libros.py       
+│   ├── view_usuarios.py     
+│   ├── view_prestamos.py    
+│   └── view_multas.py       
+├── tests/                   
+│   ├── test_models.py       
+│   ├── test_biblioteca_services.py 
+│   └── test_validation_and_dataManagement_service.py
+└── imgs MD/                  
+```
 
-- Caso de libro:
+## 📋 Funcionalidades Detalladas
 
-    ![img add book (filled fields)](imgs%20MD/add%20book%20(details).jpg)
+### 📚 Libros y Usuarios
 
-- Caso de usuario:
-    
-    ![img add user (filled fields)](imgs%20MD/add%20user%20(details).jpg)
+Debido a que la estructura de gestión de usuarios y libros es similar, se explicarán sus funcionalidades de manera conjunta.
 
-Despues de llenar los campos, se mostrara una vista previa de las caracteristicas del nuevo "sujeto" y se debera confirmar su creacion para ser agregados en la base de datos.
+#### ➕ Agregar Nuevo Registro
 
-- Caso de libro:
-    
-    ![img add book (filled fields)](imgs%20MD/add%20book%20(confirm).jpg)
+El usuario deberá completar los campos con las características del elemento (libro o usuario) que desea ingresar.
 
-- Caso de usuario:
-    
-    ![img add user (filled fields)](imgs%20MD/add%20user%20(details).jpg)
+**Ejemplo - Agregar Libro:**
+![img add book (filled fields)](imgs%20MD/add%20book%20(details).jpg)
 
-En caso de rechazarlo se volvera al menu.
+**Ejemplo - Agregar Usuario:**
+![img add user (filled fields)](imgs%20MD/add%20user%20(details).jpg)
 
-#### Buscar por categoria
+**Proceso de confirmación:**
+Después de completar los campos, se mostrará una vista previa y se solicitará confirmación para agregar el registro a la base de datos.
 
-El usuario debera elegir la caracteristica (categoria) por la cual desea filtrar los resultados de busqueda.
+**Confirmación de Libro:**
+![img add book (confirm)](imgs%20MD/add%20book%20(confirm).jpg)
 
-En caso de elegir la opcion 'Ver todos', no se realizara ningun filtro y se mostraran todos los registro en la base de datos.
+**Confirmación de Usuario:**
+![img add user (confirm)](imgs%20MD/add%20user%20(confirm).jpg)
 
-- Caso libro:
-    
-    ![img find book (all)](imgs%20MD/find%20book%20(all).jpg)
+> **Nota**: Si se rechaza la confirmación, el sistema regresará al menú principal.
 
-- Caso usuario:
+#### 🔍 Buscar por Categoría
 
-    ![img find user (all)](imgs%20MD/find%20user%20(all).jpg)
+El usuario puede filtrar resultados por diferentes características:
 
-En caso de elegir cualquier otra opcion, el usuario debera ingresar la informacion respecto a la categoria de busqueda.
+**Opción "Ver Todos":** Muestra todos los registros sin filtros.
 
-Por ejemplo: 
+**Búsqueda de Libros (Todos):**
+![img find book (all)](imgs%20MD/find%20book%20(all).jpg)
 
-Categoria: correo, Informacion: jane@example.com
+**Búsqueda de Usuarios (Todos):**
+![img find user (all)](imgs%20MD/find%20user%20(all).jpg)
 
-- Caso libro:
-    
-    ![img find book (spec)](imgs%20MD/find%20book%20(specific).jpg)
+**Búsqueda Específica:** Para filtros específicos, ingrese la información de la categoría deseada.
 
-- Caso usuario:
-    
-    ![img find user (spec)](imgs%20MD/find%20user%20(specific).jpg)
+**Ejemplo:** Categoría: correo, Información: jane@example.com
 
-#### Actualizar registro
+**Búsqueda Específica de Libro:**
+![img find book (specific)](imgs%20MD/find%20book%20(specific).jpg)
 
-El usuario debera elegir una categoria de busqueda para el "sujeto" que desea actualizar. 
-Si se encuentra mas de una coincidencia, el programa pedira al que se utilice otro criterio de busqueda como por ejemplo un id.
+**Búsqueda Específica de Usuario:**
+![img find user (specific)](imgs%20MD/find%20user%20(specific).jpg)
 
-Al encontrar el resultado, mostrara las caracteristicas del mismo en pantalla.
+#### ✏️ Actualizar Registro
 
-- Caso libro:
-    
-    ![img upd book (find)](imgs%20MD/update%20book%20(find).jpg)
+**Proceso de actualización:**
+1. Seleccionar criterio de búsqueda para localizar el elemento
+2. Si hay múltiples coincidencias, se solicitará un criterio más específico (ej: ID)
+3. Confirmar que el elemento mostrado es correcto
 
-- Caso usuario:
-    
-    ![img upd user (find)](imgs%20MD/update%20user%20(find).jpg)
+**Localizar Libro:**
+![img update book (find)](imgs%20MD/update%20book%20(find).jpg)
 
-Se pedira al usuario que seleccione al caracteristica que desea modificar, seguido de esto debera llenar un campo con la nueva informacion.
+**Localizar Usuario:**
+![img update user (find)](imgs%20MD/update%20user%20(find).jpg)
 
-- Caso libro:
-    
-    ![img upd book (upd info)](imgs%20MD/update%20book%20(category).jpg)
+**Seleccionar campo a modificar:**
+![img update book (category)](imgs%20MD/update%20book%20(category).jpg)
 
-- Caso usuario:
-    
-    ![img upd user (upd info)](imgs%20MD/update%20user%20(update%20info).jpg)
+**Actualizar información de usuario:**
+![img update user (update info)](imgs%20MD/update%20user%20(update%20info).jpg)
 
-Por ultimo, debera confirmar los cambios para guardarlos las modificaciones.
+**Confirmar cambios:**
+![img update book (confirm)](imgs%20MD/update%20book%20(confirm).jpg)
 
-- Caso libro:
-    
-    ![img upd book (confirm)](imgs%20MD/update%20book%20(confirm).jpg)
+![img update user (confirm)](imgs%20MD/update%20user%20(confirm).jpg)
 
-- Caso usuario:
-    
-    ![img upd user (confirm)](imgs%20MD/update%20user%20(confirm).jpg)
+#### 🗑️ Eliminar Registro
 
-En caso de rechazarlos se volvera al menu.
+**Proceso:**
+1. Ingresar el ID del elemento a eliminar
+2. Para múltiples IDs, separarlos con comas
+3. Confirmar la eliminación
 
-#### Eliminar
-El usuario debera ingresar el id del 'sujeto' a eliminar. Si se desea ingresar mas de un id estos deberan estar separados por una coma.
+**Eliminar Libro:**
+![img delete book](imgs%20MD/delete%20book.jpg)
 
-- Caso libro:
-    
-    ![img upd book (confirm)](imgs%20MD/delete%20book.jpg)
+**Eliminar Usuario:**
+![img delete user](imgs%20MD/delete%20user.jpg)
 
-- Caso usuario:
-    
-    ![img upd user (confirm)](imgs%20MD/delete%20user.jpg)
+### 📋 Préstamos y Multas
 
-Por ultimo, se debera confirmar la eliminacion de/los "sujetos", en caso de rechazarlos se volvera al menu.
+> **Prerequisito**: Debe existir al menos un libro y un usuario registrados antes de crear préstamos.
 
-### Prestamos y Multas
-Para realizar un prestamo se necesita que haya al menos un registro de cada "sujeto" (libro y usuario) y que el libro a prestar se encuentre disponible.
+> **Nota**: Para acceder a la sección de multas deben existir préstamos vencidos.
 
-#### Crear presatamo
+#### ➕ Crear Préstamo
 
+**Requisitos del sistema:**
 
-## Decisiones de diseño tomadas
+1. **Validación de Libro:**
+   - Debe estar disponible (no prestado)
+   - Confirmación de que es el libro correcto
+   
+   ![img add loan (book)](imgs%20MD/add%20loan%20(book).jpg)
 
-Explica las elecciones clave de diseño, arquitectura, tecnologías o algoritmos que se hicieron durante el desarrollo del proyecto y por qué se tomaron esas decisiones.
+2. **Validación de Usuario:**
+   - No debe tener multas pendientes
+   - Confirmación de identidad del usuario
+   
+   ![img add loan (user)](imgs%20MD/add%20loan%20(user).jpg)
 
-- ![Decisión de Diseño 1](imgs%20MD/): Breve explicación de la decisión y la razón detrás de ella (por ejemplo, "Se eligió React para la interfaz de usuario debido a su ecosistema robusto y su enfoque basado en componentes para una UI escalable.").
+**Vista previa del préstamo:**
+![img add loan (details)](imgs%20MD/add%20loan%20(details%20-%20confirm).jpg)
 
-- ![Decisión de Diseño 2](imgs%20MD/): Justificación de por qué se prefirió esta opción sobre otras alternativas (por ejemplo, "Se optó por una base de datos NoSQL para manejar datos no estructurados y permitir una escalabilidad horizontal más sencilla.").
+> **Nota**: Si no se especifica fecha de préstamo, se usará la fecha actual.
 
-- ![Decisión de Diseño 3](imgs%20MD/): Cualquier compromiso o consideración importante (por ejemplo, "Se priorizó la velocidad de desarrollo sobre la optimización extrema del rendimiento en la fase inicial.")
+#### 📋 Ver Registro de Préstamos
+
+**Filtros disponibles:**
+- Ver todos los préstamos
+- Buscar por criterios específicos
+
+![img find loan (all)](imgs%20MD/find%20loan%20(all).jpg)
+
+![img find loan (specific)](imgs%20MD/find%20loan%20(spec).jpg)
+
+#### 📥 Registrar Devolución
+
+**Requisitos:**
+- El préstamo debe estar en estado "Pendiente"
+
+![img loan devolution](imgs%20MD/loan%20devolution.jpg)
+
+#### 📊 Reporte de Libros Más Prestados
+
+Genera estadísticas mostrando:
+- Cada libro prestado y frecuencia
+- Total de libros prestados
+
+![img most loaned books](imgs%20MD/most%20loaned%20books.jpg)
+
+### 💰 Gestión de Multas
+
+#### 🔍 Ver Registro de Multas
+
+**Opciones de búsqueda:**
+- Ver todas las multas
+- Buscar por ID específico
+
+![img find fines (all)](imgs%20MD/find%20fines%20(all).jpg)
+
+![img find fines (specific)](imgs%20MD/find%20fines%20(spec).jpg)
+
+#### 💳 Pagar Multa
+
+**Requisitos:**
+- La multa debe tener deuda pendiente
+- El monto debe ser exacto al valor de la deuda
+
+![img pay fine](imgs%20MD/pay%20fine.jpg)
+
+## 🧪 Testing
+
+El proyecto incluye un conjunto completo de pruebas unitarias.
+
+### Ejecutar Pruebas
+
+```bash
+# Ejecutar todas las pruebas
+pytest tests/
+
+# Ejecutar pruebas específicas
+python tests/test_models.py
+python tests/test_biblioteca_services.py
+```
+
+### Cobertura de Pruebas
+
+- **Modelos**: Tests para clases Libro, Usuario, Prestamo
+- **Servicios**: Tests para lógica de negocio
+- **Validaciones**: Tests para validación de datos
